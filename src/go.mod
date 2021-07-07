@@ -1,1 +1,1 @@
-module "gonesis"
+module "github.com/Kingmidas74/gonesis"

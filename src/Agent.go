@@ -9,8 +9,13 @@ type Agent struct {
 }
 
 func (this *Agent) nextDay(world *World, maxSteps int) {
-	for step, command := 0, this.Commands[this.CurrentCommandAddress]; step < maxSteps && !command.IsInterrupts; step++ {
+	for step := 0; step < maxSteps && this.Energy > 0; step++ {
+		command := this.Commands[this.CurrentCommandAddress]
 		command.Handler(world, this)
+		this.Energy--
+		if command.IsInterrupts {
+			break
+		}
 	}
 }
 

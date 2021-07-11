@@ -1,10 +1,10 @@
 package gonesis
 
 type World struct {
-	Cells                []Cell
-	LatitudesCount       int
-	LongitudesCount      int
+	Terrain
 	populationController Population
+
+	tomorrowWorld *World
 }
 
 func (this *World) Action(agents []Agent, maxDays, maxSteps int) {
@@ -15,8 +15,11 @@ func (this *World) Action(agents []Agent, maxDays, maxSteps int) {
 }
 
 func (this *World) runDay(agents []Agent, maxSteps int) []Agent {
-	for _, agent := range agents {
-		agent.nextDay(this, maxSteps)
+	if this.tomorrowWorld == nil {
+		this.tomorrowWorld = this
+	}
+	for i := 0; i < len(agents); i++ {
+		agents[i].nextDay(this, maxSteps)
 	}
 	return agents
 }
@@ -35,4 +38,9 @@ func (this *World) filterLivingAgents(agents []Agent) []Agent {
 		}
 	}
 	return result
+}
+
+func (this *World) GetCellInfo(latitude int, longitude int) *Cell {
+
+	return &this.Cells[latitude*this.LongitudesCount+longitude]
 }

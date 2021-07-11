@@ -2,7 +2,6 @@ package gonesis
 
 type Agent struct {
 	Brain
-	Coords    Coords
 	Direction Direction
 
 	Energy int
@@ -10,7 +9,7 @@ type Agent struct {
 
 func (this *Agent) nextDay(world *World, maxSteps int) {
 	for step := 0; step < maxSteps && this.Energy > 0; step++ {
-		command := this.Commands[this.CurrentCommandAddress]
+		command := this.GetCommand()
 		command.Handler(world, this)
 		this.Energy--
 		if command.IsInterrupts {

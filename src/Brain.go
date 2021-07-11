@@ -2,12 +2,17 @@ package gonesis
 
 type Brain struct {
 	Commands              []Command
-	CurrentCommandAddress int
+	currentCommandAddress int
 }
 
 func (this *Brain) MoveAddressOn(delta int) {
-	if delta < 0 {
-		panic("delta should be non negative")
-	}
-	this.CurrentCommandAddress = (this.CurrentCommandAddress + delta) % len(this.Commands)
+	this.SetAddress(this.currentCommandAddress + delta)
+}
+
+func (this *Brain) SetAddress(address int) {
+	this.currentCommandAddress = modLikePython(address, len(this.Commands))
+}
+
+func (this *Brain) GetCommand() Command {
+	return this.Commands[this.currentCommandAddress]
 }

@@ -19,7 +19,6 @@ func TestNextDay(t *testing.T) {
 
 	for i := 0; i < 4; i++ {
 		command := Command{}
-		command.Identifier = i
 		command.IsInterrupts = i == 2
 		command.Handler = func(world *World, currentAgent *Agent) {
 			currentAgent.MoveAddressOn(1)

@@ -2,16 +2,52 @@ package gonesis
 
 import "testing"
 
-func TestMoveAddressOn(t *testing.T) {
+func TestMoveAddressOn_SuccessWheDeltaPositive(t *testing.T) {
 	brain := Brain{}
 	for i := 0; i < 6; i++ {
 		command := Command{}
-		command.Identifier = i
 		brain.Commands = append(brain.Commands, command)
 	}
-	brain.CurrentCommandAddress = 4
+	brain.MoveAddressOn(1)
 	brain.MoveAddressOn(2)
-	if brain.CurrentCommandAddress != 0 {
-		t.Errorf("%d", brain.CurrentCommandAddress)
+	if brain.currentCommandAddress != 3 {
+		t.Errorf("Wrong move address %d", brain.currentCommandAddress)
+	}
+}
+
+func TestMoveAddressOn_SuccessWheDeltaNegative(t *testing.T) {
+	brain := Brain{}
+	for i := 0; i < 6; i++ {
+		command := Command{}
+		brain.Commands = append(brain.Commands, command)
+	}
+	brain.MoveAddressOn(2)
+	brain.MoveAddressOn(-4)
+	if brain.currentCommandAddress != 4 {
+		t.Errorf("Wrong move address %d", brain.currentCommandAddress)
+	}
+}
+
+func TestSetAddress_SuccessWhenAddressBiggerThanLength(t *testing.T) {
+	brain := Brain{}
+	for i := 0; i < 6; i++ {
+		command := Command{}
+		brain.Commands = append(brain.Commands, command)
+	}
+	brain.SetAddress(8)
+	if brain.currentCommandAddress != 2 {
+		t.Errorf("Wrong set address %d", brain.currentCommandAddress)
+	}
+}
+
+func TestSetAddress_SuccessWhenAddressLessZero(t *testing.T) {
+	brain := Brain{}
+	for i := 0; i < 6; i++ {
+		command := Command{}
+		brain.Commands = append(brain.Commands, command)
+	}
+	brain.SetAddress(-1)
+	if brain.currentCommandAddress != 5 {
+		t.Errorf("Wrong set address %d", brain.currentCommandAddress)
 	}
 }

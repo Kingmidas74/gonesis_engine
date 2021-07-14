@@ -4,7 +4,8 @@ type Agent struct {
 	Coords
 	Brain
 
-	Energy int
+	Energy     int
+	Generation int
 }
 
 func (this *Agent) nextDay(world *World, maxSteps int) {

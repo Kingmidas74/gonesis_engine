@@ -10,6 +10,7 @@ const (
 )
 
 type Cell struct {
+	Coords
 	CellType CellType
 	Cost     int
 	Agent    *Agent

@@ -41,7 +41,7 @@ func TestEvaluateAgents(t *testing.T) {
 			Size:                64,
 		},
 	}
-	livingAgents := world.evaluateAgents(agents)
+	_, livingAgents, _ := world.evaluateAgents(agents)
 	if len(livingAgents) != world.populationController.Size {
 		t.Errorf("evaluation failed")
 	}
@@ -88,17 +88,14 @@ func TestRunDay(t *testing.T) {
 
 func TestWorld_Action(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
-	randCommandIndices := []int{3, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 2, 2, 1, 1, 1, 2, 2, 3}
+	randCommandIndices := []int{0, randomIntBetween(0, 7), 1, randomIntBetween(0, 7), 0, randomIntBetween(0, 7)}
 
 	agents := make([]Agent, 0)
-	for i := 0; i < 1; i++ {
-		rand.Shuffle(len(randCommandIndices), func(i, j int) {
-			randCommandIndices[i], randCommandIndices[j] = randCommandIndices[j], randCommandIndices[i]
-		})
+	for i := 0; i < 5; i++ {
 		agents = append(agents, Agent{
-			Energy: 20,
+			Energy: 10,
 			Brain: Brain{
-				CommandList: []Command{waitCommand, moveCommand, eatCommand},
+				CommandList: []Command{moveCommand, waitCommand, eatCommand},
 				Commands:    randCommandIndices,
 			},
 		})
@@ -106,17 +103,17 @@ func TestWorld_Action(t *testing.T) {
 	}
 
 	terrain := Terrain{}
-	terrain.Generate(15, 15, agents, 30, 15)
+	terrain.Generate(10, 10, agents, 20, 4)
 
 	world := World{
 		Terrain: terrain,
 		populationController: Population{
-			NextGenerationLine:  1,
+			NextGenerationLine:  8,
 			MutationProbability: 0,
-			Size:                8,
+			Size:                10,
 		},
 	}
 
-	world.Action(agents, 3, 3, drawFrame)
+	world.Action(agents, 50, 6, drawFrame)
 
 }

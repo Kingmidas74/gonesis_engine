@@ -33,6 +33,7 @@ func getTargetCell(world *World, agent *Agent, direction int) *Cell {
 var (
 	moveCommand = Command{
 		IsInterrupts: true,
+		Identifier:   0,
 		Handler: func(world *World, agent *Agent) {
 			currentCell := world.GetCell(agent.Latitude, agent.Longitude)
 
@@ -41,10 +42,13 @@ var (
 			targetCell := getTargetCell(world, agent, direction)
 
 			if targetCell.CellType == Empty {
+				agent.Latitude = targetCell.Latitude
+				agent.Longitude = targetCell.Longitude
 				targetCell.Agent = agent
 				targetCell.CellType = Locked
 				currentCell.Agent = nil
 				currentCell.CellType = Empty
+
 			}
 
 			agent.Brain.MoveAddressOn(2)
@@ -52,6 +56,7 @@ var (
 	}
 	eatCommand = Command{
 		IsInterrupts: false,
+		Identifier:   1,
 		Handler: func(world *World, agent *Agent) {
 
 			argument := agent.Brain.GetCommandIdentifier(agent.Brain.currentCommandAddress + 1)
@@ -68,6 +73,7 @@ var (
 	}
 	waitCommand = Command{
 		IsInterrupts: false,
+		Identifier:   2,
 		Handler: func(world *World, agent *Agent) {
 			agent.Brain.MoveAddressOn(1)
 		},

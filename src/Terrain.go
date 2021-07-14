@@ -40,7 +40,12 @@ func (this *Terrain) Generate(latitudesCount, longitudesCount int, agents []Agen
 
 	for currentLatitude := 0; currentLatitude < latitudesCount; currentLatitude++ {
 		for currentLongitude := 0; currentLongitude < longitudesCount; currentLongitude++ {
-			currentCell := Cell{}
+			currentCell := Cell{
+				Coords: Coords{
+					Latitude:  currentLatitude,
+					Longitude: currentLongitude,
+				},
+			}
 
 			currentOrganicProbability := randomIntBetween(1, 100)
 			if organicCellsCount < latitudesCount*longitudesCount-(emptyCellsCount) && organicProbability > currentOrganicProbability {

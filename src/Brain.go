@@ -14,14 +14,23 @@ func (this *Brain) SetAddress(address int) {
 	this.currentCommandAddress = modLikePython(address, len(this.Commands))
 }
 
-func (this *Brain) GetCurrentCommand() *Command {
-
-	commandIndex := this.Commands[this.currentCommandAddress]
-	for commandIndex > len(this.CommandList)-1 {
-		this.MoveAddressOn(commandIndex)
-		commandIndex = this.Commands[this.currentCommandAddress]
+func (this *Brain) SearchCurrentCommand() *Command {
+	for i := 0; i < len(this.CommandList); i++ {
+		if this.CommandList[i].Identifier == this.GetCommandIdentifier(this.currentCommandAddress) {
+			return &this.CommandList[i]
+		}
 	}
-	return &this.CommandList[this.Commands[this.currentCommandAddress]]
+	return nil
+}
+
+func (this *Brain) GetCurrentCommand() *Command {
+	currentCommand := this.SearchCurrentCommand()
+
+	for currentCommand == nil {
+		this.SetAddress(this.GetCommandIdentifier(this.currentCommandAddress))
+		currentCommand = this.SearchCurrentCommand()
+	}
+	return currentCommand
 
 }
 

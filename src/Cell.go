@@ -4,8 +4,9 @@ type CellType byte
 
 const (
 	Empty    = 0
-	Organic  = 1
-	Obstacle = 2
+	Locked   = 1
+	Organic  = 2
+	Obstacle = 3
 )
 
 type Cell struct {

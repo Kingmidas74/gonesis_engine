@@ -3,25 +3,23 @@ package gonesis
 type World struct {
 	Terrain
 	populationController Population
-
-	tomorrowWorld *World
 }
 
-func (this *World) Action(agents []Agent, maxDays, maxSteps int) {
+func (this *World) Action(agents []Agent, maxDays, maxSteps int, callback func(*Terrain, int)) {
 	agents = this.populationController.Reproduction(agents)
 	for maxDays > 0 {
-		agents = this.runDay(agents, maxSteps)
+		this.Terrain.placeAgents(agents)
+		this.runDay(agents, maxSteps)
+		callback(&this.Terrain, maxDays)
+		//agents = this.evaluateAgents(agents)
+		maxDays--
 	}
 }
 
-func (this *World) runDay(agents []Agent, maxSteps int) []Agent {
-	if this.tomorrowWorld == nil {
-		this.tomorrowWorld = this
-	}
+func (this *World) runDay(agents []Agent, maxSteps int) {
 	for i := 0; i < len(agents); i++ {
 		agents[i].nextDay(this, maxSteps)
 	}
-	return agents
 }
 
 func (this *World) evaluateAgents(agents []Agent) []Agent {

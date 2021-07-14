@@ -1,7 +1,8 @@
 package gonesis
 
 type Brain struct {
-	Commands              []Command
+	CommandList           []Command
+	Commands              []int
 	currentCommandAddress int
 }
 
@@ -13,6 +14,17 @@ func (this *Brain) SetAddress(address int) {
 	this.currentCommandAddress = modLikePython(address, len(this.Commands))
 }
 
-func (this *Brain) GetCommand() Command {
-	return this.Commands[this.currentCommandAddress]
+func (this *Brain) GetCurrentCommand() *Command {
+
+	commandIndex := this.Commands[this.currentCommandAddress]
+	for commandIndex > len(this.CommandList)-1 {
+		this.MoveAddressOn(commandIndex)
+		commandIndex = this.Commands[this.currentCommandAddress]
+	}
+	return &this.CommandList[this.Commands[this.currentCommandAddress]]
+
+}
+
+func (this *Brain) GetCommandIdentifier(address int) int {
+	return this.Commands[modLikePython(address, len(this.Commands))]
 }

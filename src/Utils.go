@@ -28,9 +28,10 @@ func drawFrame(terrain *Terrain, frameNumber int) {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	cellzoom := 1
+	cellzoom := 50
 	m := image.NewRGBA(image.Rect(0, 0, terrain.LatitudesCount*cellzoom, terrain.LongitudesCount*cellzoom))
-	organiccolor := color.RGBA{R: 255, B: 255, A: 255}
+	organiccolor := color.RGBA{R: 0, G: 255, B: 0, A: 255}
+	agentcolor := color.RGBA{R: 0, G: 0, B: 255, A: 255}
 	emptycolor := color.RGBA{R: 255, G: 255, B: 255, A: 255}
 
 	draw.Draw(m, image.Rect(0, 0, terrain.LatitudesCount*cellzoom+cellzoom, terrain.LongitudesCount*cellzoom+cellzoom), &image.Uniform{C: organiccolor}, image.Point{}, draw.Src)
@@ -39,6 +40,10 @@ func drawFrame(terrain *Terrain, frameNumber int) {
 		for currentLongitude := 0; currentLongitude < terrain.LongitudesCount; currentLongitude++ {
 			if terrain.GetCell(currentLatitude, currentLongitude).CellType == Empty {
 				draw.Draw(m, image.Rect(currentLatitude*cellzoom, currentLongitude*cellzoom, currentLatitude*cellzoom+cellzoom, currentLongitude*cellzoom+cellzoom), &image.Uniform{C: emptycolor}, image.Point{}, draw.Src)
+			} else if terrain.GetCell(currentLatitude, currentLongitude).CellType == Locked {
+				draw.Draw(m, image.Rect(currentLatitude*cellzoom, currentLongitude*cellzoom, currentLatitude*cellzoom+cellzoom, currentLongitude*cellzoom+cellzoom), &image.Uniform{C: agentcolor}, image.Point{}, draw.Src)
+			} else if terrain.GetCell(currentLatitude, currentLongitude).CellType == Organic {
+				draw.Draw(m, image.Rect(currentLatitude*cellzoom, currentLongitude*cellzoom, currentLatitude*cellzoom+cellzoom, currentLongitude*cellzoom+cellzoom), &image.Uniform{C: organiccolor}, image.Point{}, draw.Src)
 			}
 		}
 	}

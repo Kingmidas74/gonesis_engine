@@ -24,7 +24,7 @@ func TestNextDay(t *testing.T) {
 			currentAgent.MoveAddressOn(1)
 		}
 
-		agent.Commands = append(agent.Commands, command)
+		agent.CommandList = append(agent.CommandList, command)
 	}
 
 	agent.nextDay(&World{}, 10)

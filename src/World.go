@@ -6,21 +6,21 @@ type World struct {
 }
 
 func (this *World) Action(agents []Agent, maxDays, maxSteps int, callback func(*Terrain, int)) {
+	if len(agents) == 0 {
+		return
+	}
 	passDays := 0
 	for true {
-		if len(agents) == 0 {
-			break
+		isNewGeneration, newAgents, err := this.evaluateAgents(agents)
+		if err != nil {
+			return
+		} else if isNewGeneration {
+			agents = newAgents
+			this.placeAgents(agents)
 		}
 		callback(&this.Terrain, passDays)
-		isNewGeneration, newAgents, err := this.evaluateAgents(agents)
-		if isNewGeneration {
-			agents = newAgents
-			this.Terrain.placeAgents(agents)
-		} else if err != nil {
-			break
-		}
 		this.runDay(agents, maxSteps)
-		//agents = this.evaluateAgents(agents)
+
 		maxDays--
 		passDays++
 	}
@@ -28,29 +28,20 @@ func (this *World) Action(agents []Agent, maxDays, maxSteps int, callback func(*
 
 func (this *World) runDay(agents []Agent, maxSteps int) {
 	for i := 0; i < len(agents); i++ {
-		agents[i].nextDay(this, maxSteps)
+		agents[i].NextDay(this, maxSteps)
 	}
 }
 
 func (this *World) evaluateAgents(agents []Agent) (bool, []Agent, error) {
-	livingAgents := this.filterLivingAgents(agents)
-	if len(livingAgents) == 0 {
-		panic("end")
-	}
-	return this.populationController.Reproduction(livingAgents)
+	return this.populationController.Reproduction(this.filterLivingAgents(agents))
 }
 
 func (this *World) filterLivingAgents(agents []Agent) []Agent {
 	result := make([]Agent, 0)
-	for _, agent := range agents {
-		if agent.isAlive() {
-			result = append(result, agent)
+	for i := 0; i < len(agents); i++ {
+		if agents[i].IsAlive() {
+			result = append(result, agents[i])
 		}
 	}
 	return result
-}
-
-func (this *World) GetCellInfo(latitude int, longitude int) *Cell {
-
-	return &this.Cells[latitude*this.LongitudesCount+longitude]
 }

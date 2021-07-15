@@ -1,6 +1,6 @@
 package gonesis
 
 type Coords struct {
-	Latitude  int
-	Longitude int
+	X int
+	Y int
 }

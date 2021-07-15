@@ -1,37 +1,27 @@
 package gonesis
 
 type Brain struct {
-	CommandList           []Command
-	Commands              []int
-	currentCommandAddress int
-}
-
-func (this *Brain) MoveAddressOn(delta int) {
-	this.SetAddress(this.currentCommandAddress + delta)
+	CommandList    CommandList
+	Commands       []int
+	CurrentAddress int
 }
 
 func (this *Brain) SetAddress(address int) {
-	this.currentCommandAddress = modLikePython(address, len(this.Commands))
-}
-
-func (this *Brain) SearchCurrentCommand() *Command {
-	for i := 0; i < len(this.CommandList); i++ {
-		if this.CommandList[i].Identifier == this.GetCommandIdentifier(this.currentCommandAddress) {
-			return &this.CommandList[i]
-		}
-	}
-	return nil
+	this.CurrentAddress = modLikePython(address, len(this.Commands))
 }
 
 func (this *Brain) GetCurrentCommand() *Command {
-	currentCommand := this.SearchCurrentCommand()
+	currentCommand := this.CommandList.GetCommandByIdentifier(this.Commands[modLikePython(this.CurrentAddress, len(this.Commands))])
 
 	for currentCommand == nil {
-		this.SetAddress(this.GetCommandIdentifier(this.currentCommandAddress))
-		currentCommand = this.SearchCurrentCommand()
+		this.MoveAddressOn(this.Commands[modLikePython(this.CurrentAddress, len(this.Commands))])
+		currentCommand = this.CommandList.GetCommandByIdentifier(this.Commands[modLikePython(this.CurrentAddress, len(this.Commands))])
 	}
 	return currentCommand
+}
 
+func (this *Brain) MoveAddressOn(delta int) {
+	this.SetAddress(this.CurrentAddress + delta)
 }
 
 func (this *Brain) GetCommandIdentifier(address int) int {

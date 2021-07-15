@@ -23,21 +23,22 @@ func randomIntBetween(min, max int) int {
 }
 
 func drawFrame(terrain *Terrain, frameNumber int) {
+
 	out, err := os.Create(fmt.Sprintf("./frames/%d.png", frameNumber))
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	cellzoom := 50
-	m := image.NewRGBA(image.Rect(0, 0, terrain.LatitudesCount*cellzoom, terrain.LongitudesCount*cellzoom))
+	cellzoom := 100
+	m := image.NewRGBA(image.Rect(0, 0, terrain.Width*cellzoom, terrain.Height*cellzoom))
 	organiccolor := color.RGBA{R: 0, G: 255, B: 0, A: 255}
 	//agentcolor := color.RGBA{R: 0, G: 0, B: 255, A: 255}
 	emptycolor := color.RGBA{R: 255, G: 255, B: 255, A: 255}
 
-	draw.Draw(m, image.Rect(0, 0, terrain.LatitudesCount*cellzoom+cellzoom, terrain.LongitudesCount*cellzoom+cellzoom), &image.Uniform{C: organiccolor}, image.Point{}, draw.Src)
+	draw.Draw(m, image.Rect(0, 0, terrain.Width*cellzoom+cellzoom, terrain.Height*cellzoom+cellzoom), &image.Uniform{C: organiccolor}, image.Point{}, draw.Src)
 
-	for currentLatitude := 0; currentLatitude < terrain.LatitudesCount; currentLatitude++ {
-		for currentLongitude := 0; currentLongitude < terrain.LongitudesCount; currentLongitude++ {
+	for currentLatitude := 0; currentLatitude < terrain.Width; currentLatitude++ {
+		for currentLongitude := 0; currentLongitude < terrain.Height; currentLongitude++ {
 			if currentCell := terrain.GetCell(currentLatitude, currentLongitude); currentCell.CellType == Empty {
 				draw.Draw(m, image.Rect(currentLatitude*cellzoom, currentLongitude*cellzoom, currentLatitude*cellzoom+cellzoom, currentLongitude*cellzoom+cellzoom), &image.Uniform{C: emptycolor}, image.Point{}, draw.Src)
 			} else if currentCell.CellType == Locked {

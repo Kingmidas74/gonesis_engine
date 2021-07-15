@@ -7,13 +7,13 @@ import (
 )
 
 func TestTerrain_SetCell(t *testing.T) {
-	latitudeCount := 5
-	longitudeCount := 5
+	width := 5
+	height := 5
 	organicProbability := 50
 	emptyCellsCount := 1
 
 	terrain := Terrain{}
-	terrain.Generate(latitudeCount, longitudeCount, nil, organicProbability, emptyCellsCount)
+	terrain.Generate(width, height, nil, organicProbability, emptyCellsCount)
 
 	terrain.SetCell(-2, 5, Cell{CellType: Obstacle})
 
@@ -28,29 +28,29 @@ func TestGenerateWithAgent_Success(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 
 	agents := make([]Agent, 0)
-	for i := 0; i < 2; i++ {
+	for i := 0; i < 10; i++ {
 		agents = append(agents, Agent{
 			Energy: 20,
 		})
 	}
 
-	latitudeCount := 1024
-	longitudeCount := 768
-	organicProbability := 5
+	width := 10
+	height := 10
+	organicProbability := 50
 	emptyCellsCount := 20
 
 	terrain := Terrain{}
-	terrain.Generate(latitudeCount, longitudeCount, agents, organicProbability, emptyCellsCount)
+	terrain.Generate(width, height, agents, organicProbability, emptyCellsCount)
 
-	if len(terrain.Cells) != latitudeCount*longitudeCount {
+	if len(terrain.Cells) != width*height {
 		t.Errorf("terrain generate error")
 	}
 
 	freeSpace := 0
-	for currentLatitude := 0; currentLatitude < latitudeCount; currentLatitude++ {
-		for currentLongitude := 0; currentLongitude < longitudeCount; currentLongitude++ {
-			if terrain.Cells[currentLatitude*longitudeCount+currentLongitude].CellType == Empty {
-				if terrain.Cells[currentLatitude*longitudeCount+currentLongitude].Cost != 0 {
+	for y := 0; y < height; y++ {
+		for x := 0; x < width; x++ {
+			if currentCell := terrain.GetCell(x, y); currentCell.CellType == Empty {
+				if currentCell.Cost != 0 {
 					t.Errorf("Free space shouldn't cost anything")
 				}
 				freeSpace++
@@ -62,7 +62,7 @@ func TestGenerateWithAgent_Success(t *testing.T) {
 		t.Errorf("not enought free space")
 	}
 
-	if &agents[0] != terrain.GetCell(agents[0].Latitude, agents[0].Longitude).Agent {
+	if &agents[0] != terrain.GetCell(agents[0].X, agents[0].Y).Agent {
 		t.Errorf("agents weren't linked")
 	}
 
@@ -72,23 +72,23 @@ func TestGenerateWithAgent_Success(t *testing.T) {
 func TestGenerateWithoutAgents_Success(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 
-	latitudeCount := 1024
-	longitudeCount := 768
-	organicProbability := 5
+	width := 10
+	height := 10
+	organicProbability := 50
 	emptyCellsCount := 20
 
 	terrain := Terrain{}
-	terrain.Generate(latitudeCount, longitudeCount, nil, organicProbability, emptyCellsCount)
+	terrain.Generate(width, height, nil, organicProbability, emptyCellsCount)
 
-	if len(terrain.Cells) != latitudeCount*longitudeCount {
+	if len(terrain.Cells) != width*height {
 		t.Errorf("terrain generate error")
 	}
 
 	freeSpace := 0
-	for currentLatitude := 0; currentLatitude < latitudeCount; currentLatitude++ {
-		for currentLongitude := 0; currentLongitude < longitudeCount; currentLongitude++ {
-			if terrain.Cells[currentLatitude*longitudeCount+currentLongitude].CellType == Empty {
-				if terrain.Cells[currentLatitude*longitudeCount+currentLongitude].Cost != 0 {
+	for y := 0; y < height; y++ {
+		for x := 0; x < width; x++ {
+			if currentCell := terrain.GetCell(x, y); currentCell.CellType == Empty {
+				if currentCell.Cost != 0 {
 					t.Errorf("Free space shouldn't cost anything")
 				}
 				freeSpace++

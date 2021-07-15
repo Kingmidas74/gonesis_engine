@@ -31,9 +31,9 @@ func TestEvaluateAgents(t *testing.T) {
 
 	world := World{
 		Terrain: Terrain{
-			Cells:           nil,
-			LatitudesCount:  1024,
-			LongitudesCount: 1024,
+			Cells:  nil,
+			Width:  1024,
+			Height: 1024,
 		},
 		populationController: Population{
 			NextGenerationLine:  8,
@@ -41,9 +41,11 @@ func TestEvaluateAgents(t *testing.T) {
 			Size:                64,
 		},
 	}
-	_, livingAgents, _ := world.evaluateAgents(agents)
+	_, livingAgents, err := world.evaluateAgents(agents)
 	if len(livingAgents) != world.populationController.Size {
 		t.Errorf("evaluation failed")
+	} else if err != nil {
+		t.Errorf(err.Error())
 	}
 }
 
@@ -57,7 +59,7 @@ func TestRunDay(t *testing.T) {
 		agents = append(agents, Agent{
 			Energy: 20,
 			Brain: Brain{
-				CommandList: []Command{moveCommand, eatCommand},
+				CommandList: CommandList{Commands: []Command{moveCommand, eatCommand}},
 				Commands:    randCommandIndices,
 			},
 		})
@@ -74,46 +76,47 @@ func TestRunDay(t *testing.T) {
 			Size:                len(agents),
 		},
 	}
-	for currentLatitude := 0; currentLatitude < terrain.LatitudesCount; currentLatitude++ {
-		for currentLongitude := 0; currentLongitude < terrain.LongitudesCount; currentLongitude++ {
-			currentCell := terrain.GetCell(currentLatitude, currentLongitude)
+	for y := 0; y < terrain.Height; y++ {
+		for x := 0; x < terrain.Width; x++ {
+			currentCell := terrain.GetCell(x, y)
 			fmt.Printf("%2d %2d | ", currentCell.CellType, currentCell.Cost)
 		}
 		println()
 	}
-
+	drawFrame(&terrain, 1)
 	world.runDay(agents, 3)
 
 }
 
 func TestWorld_Action(t *testing.T) {
+
 	rand.Seed(time.Now().UnixNano())
-	randCommandIndices := []int{0, randomIntBetween(0, 7), 1, randomIntBetween(0, 7), 0, randomIntBetween(0, 7)}
+
+	randCommandIndices := []int{0, 0, 0, 0, 1, 0, 1, 0, 0, 0}
 
 	agents := make([]Agent, 0)
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 1; i++ {
 		agents = append(agents, Agent{
 			Energy: 10,
 			Brain: Brain{
-				CommandList: []Command{moveCommand, waitCommand, eatCommand},
+				CommandList: CommandList{Commands: []Command{moveCommand, eatCommand}},
 				Commands:    randCommandIndices,
 			},
 		})
-		fmt.Printf("%v", randCommandIndices)
 	}
 
 	terrain := Terrain{}
-	terrain.Generate(10, 10, agents, 20, 4)
+	terrain.Generate(25, 25, agents, 10, 16)
 
 	world := World{
 		Terrain: terrain,
 		populationController: Population{
-			NextGenerationLine:  8,
+			NextGenerationLine:  1,
 			MutationProbability: 0,
-			Size:                10,
+			Size:                2,
 		},
 	}
 
-	world.Action(agents, 50, 6, drawFrame)
+	world.Action(agents, 50, 1, drawFrame)
 
 }

@@ -1,59 +1,69 @@
 package gonesis
 
 type Terrain struct {
-	Cells           []Cell
-	LatitudesCount  int
-	LongitudesCount int
+	Cells  []Cell
+	Width  int
+	Height int
 }
 
-func (this *Terrain) transformLatitude(latitude int) int {
-	return modLikePython(latitude, this.LatitudesCount)
+func (this *Terrain) transformX(x int) int {
+	return modLikePython(x, this.Width)
 }
 
-func (this *Terrain) transformLongitude(longitude int) int {
-	return modLikePython(longitude, this.LongitudesCount)
+func (this *Terrain) transformY(y int) int {
+	return modLikePython(y, this.Height)
 }
 
-func (this *Terrain) getCellIndex(latitude, longitude int) int {
-	latitude = this.transformLatitude(latitude)
-	longitude = this.transformLongitude(longitude)
-	return latitude*this.LongitudesCount + longitude
+func (this *Terrain) getCellIndex(x, y int) int {
+	x = this.transformX(x)
+	y = this.transformY(y)
+	return y*this.Width + x
 }
 
-func (this *Terrain) GetCell(latitude, longitude int) *Cell {
-	return &this.Cells[this.getCellIndex(latitude, longitude)]
+func (this *Terrain) GetCell(x, y int) *Cell {
+	return &this.Cells[this.getCellIndex(x, y)]
 }
 
-func (this *Terrain) SetCell(latitude, longitude int, cell Cell) {
-	this.Cells[this.getCellIndex(latitude, longitude)] = cell
+func (this *Terrain) SetCell(x, y int, cell Cell) {
+	this.Cells[this.getCellIndex(x, y)] = cell
 }
 
-func (this *Terrain) Generate(latitudesCount, longitudesCount int, agents []Agent, organicProbability int, emptyCellsCount int) {
-	this.LatitudesCount, this.LongitudesCount = latitudesCount, longitudesCount
+func (this *Terrain) Generate(width, height int, agents []Agent, organicProbability int, emptyCellsCount int) {
+	this.Width, this.Height = width, height
 
-	this.Cells = make([]Cell, latitudesCount*longitudesCount)
+	this.Cells = make([]Cell, width*height)
 	organicCellsCount := 0
 
 	if agents != nil {
 		emptyCellsCount += len(agents)
 	}
 
-	for currentLatitude := 0; currentLatitude < latitudesCount; currentLatitude++ {
-		for currentLongitude := 0; currentLongitude < longitudesCount; currentLongitude++ {
+	for y := 0; y < height; y++ {
+		for x := 0; x < width; x++ {
 			currentCell := Cell{
 				Coords: Coords{
-					Latitude:  currentLatitude,
-					Longitude: currentLongitude,
+					X: x,
+					Y: y,
 				},
 			}
 
 			currentOrganicProbability := randomIntBetween(1, 100)
-			if organicCellsCount < latitudesCount*longitudesCount-(emptyCellsCount) && organicProbability > currentOrganicProbability {
+			if organicCellsCount < width*height-(emptyCellsCount) && organicProbability > currentOrganicProbability {
 				currentCell.CellType = Organic
 				currentCell.Cost = randomIntBetween(1, 10)
 				organicCellsCount++
 			}
-			this.SetCell(currentLatitude, currentLongitude, currentCell)
+			this.SetCell(x, y, currentCell)
+		}
+	}
+
+	for y := 0; y < height; y++ {
+		for x := 0; x < width; x++ {
+			if x == 0 || y == 0 || x == width-1 || y == height-1 {
+				currentCell := this.GetCell(x, y)
+				currentCell.CellType = 0
+				currentCell.Cost = 0
+			}
 		}
 	}
 
@@ -65,24 +75,31 @@ func (this *Terrain) placeAgents(agents []Agent) {
 		return
 	}
 
-	for i := 0; i < this.LatitudesCount*this.LongitudesCount; i++ {
-		if this.Cells[i].CellType == Locked {
+	for i := 0; i < len(this.Cells); i++ {
+		if this.Cells[i].CellType == Locked || this.Cells[i].Agent != nil {
 			this.Cells[i].Agent = nil
 			this.Cells[i].CellType = Empty
 		}
 	}
 
 	placedAgentsCount := 0
-	for currentLatitude := 0; currentLatitude < this.LatitudesCount; currentLatitude++ {
-		for currentLongitude := 0; currentLongitude < this.LongitudesCount; currentLongitude++ {
-			if currentCell := this.GetCell(currentLatitude, currentLongitude); currentCell.CellType == Empty && placedAgentsCount < len(agents) {
-				agent := &agents[placedAgentsCount]
-				currentCell.Agent = agent
-				agent.Latitude = currentLatitude
-				agent.Longitude = currentLongitude
-				currentCell.CellType = Locked
-				placedAgentsCount++
+
+	for placedAgentsCount < len(agents) {
+		for y := 0; y < this.Height; y++ {
+			for x := 0; x < this.Width; x++ {
+				if (x == 0 || y == 0 || x == this.Width-1 || y == this.Height-1) && randomIntBetween(0, 101) > 50 && placedAgentsCount < len(agents) {
+					currentCell := this.GetCell(x, y)
+
+					agent := &agents[placedAgentsCount]
+					currentCell.Agent = agent
+					agent.X = x
+					agent.Y = y
+					currentCell.CellType = Locked
+					placedAgentsCount++
+
+				}
 			}
 		}
 	}
+
 }

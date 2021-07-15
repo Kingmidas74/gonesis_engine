@@ -10,7 +10,7 @@ func TestMakeNewAgent(t *testing.T) {
 	population := Population{}
 	agent := Agent{}
 	agent.Energy = 3
-	newAgent := population.makeNewAgent(agent, false)
+	newAgent := population.makeNewAgent(agent)
 	newAgent.Energy = 2
 	if agent.Energy == newAgent.Energy {
 		t.Errorf("Agent was reproduce wrong! Link is same")
@@ -25,7 +25,7 @@ func TestReCreateMinimumParents(t *testing.T) {
 	agent.Energy = 3
 	agents := make([]Agent, 0)
 	agents = append(agents, agent)
-	firstColonists := population.reCreateMinimumParents(agents)
+	firstColonists := population.ReCreateMinimumParents(agents)
 	if len(firstColonists) != population.NextGenerationLine {
 		t.Errorf("Not enough colonists")
 	}

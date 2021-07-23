@@ -28,15 +28,11 @@ func (this *Terrain) SetCell(x, y int, cell Cell) {
 	this.Cells[this.getCellIndex(x, y)] = cell
 }
 
-func (this *Terrain) Generate(width, height int, agents []*Agent, organicProbability int, emptyCellsCount int) {
+func (this *Terrain) Generate(width, height int, organicProbability int, emptyCellsCount int) {
 	this.Width, this.Height = width, height
 
 	this.Cells = make([]Cell, width*height)
 	organicCellsCount := 0
-
-	if agents != nil {
-		emptyCellsCount += len(agents)
-	}
 
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
@@ -66,20 +62,11 @@ func (this *Terrain) Generate(width, height int, agents []*Agent, organicProbabi
 			}
 		}
 	}
-
-	this.placeAgents(agents)
 }
 
 func (this *Terrain) placeAgents(agents []*Agent) {
 	if agents == nil {
 		return
-	}
-
-	for i := 0; i < len(this.Cells); i++ {
-		if this.Cells[i].CellType == LockedCell || this.Cells[i].Agent != nil {
-			this.Cells[i].Agent = nil
-			this.Cells[i].CellType = EmptyCell
-		}
 	}
 
 	placedAgentsCount := 0
@@ -102,16 +89,4 @@ func (this *Terrain) placeAgents(agents []*Agent) {
 		}
 	}
 
-}
-
-func (this *Terrain) cleanDeath() {
-	for y := 0; y < this.Height; y++ {
-		for x := 0; x < this.Width; x++ {
-			currentCell := this.GetCell(x, y)
-			if currentCell.Agent != nil && !currentCell.Agent.IsAlive() {
-				currentCell.Agent = nil
-				currentCell.CellType = EmptyCell
-			}
-		}
-	}
 }

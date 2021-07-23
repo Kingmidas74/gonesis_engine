@@ -13,7 +13,7 @@ func TestTerrain_SetCell(t *testing.T) {
 	emptyCellsCount := 1
 
 	terrain := Terrain{}
-	terrain.Generate(width, height, nil, organicProbability, emptyCellsCount)
+	terrain.Generate(width, height, organicProbability, emptyCellsCount)
 
 	terrain.SetCell(-2, 5, Cell{CellType: ObstacleCell})
 
@@ -40,11 +40,13 @@ func TestGenerateWithAgent_Success(t *testing.T) {
 	emptyCellsCount := 20
 
 	terrain := Terrain{}
-	terrain.Generate(width, height, agents, organicProbability, emptyCellsCount)
+	terrain.Generate(width, height, organicProbability, emptyCellsCount)
 
 	if len(terrain.Cells) != width*height {
 		t.Errorf("terrain generate error")
 	}
+
+	terrain.placeAgents(agents)
 
 	freeSpace := 0
 	for y := 0; y < height; y++ {
@@ -78,7 +80,7 @@ func TestGenerateWithoutAgents_Success(t *testing.T) {
 	emptyCellsCount := 20
 
 	terrain := Terrain{}
-	terrain.Generate(width, height, nil, organicProbability, emptyCellsCount)
+	terrain.Generate(width, height, organicProbability, emptyCellsCount)
 
 	if len(terrain.Cells) != width*height {
 		t.Errorf("terrain generate error")

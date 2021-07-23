@@ -85,6 +85,7 @@ var (
 				targetCell.CellType = LockedCell
 				currentCell.Agent = nil
 				currentCell.CellType = EmptyCell
+				currentCell.Cost = 0
 			}
 
 			agent.Brain.MoveAddressOn(2)

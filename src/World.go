@@ -6,7 +6,6 @@ type World struct {
 }
 
 func (this *World) Action(maxSteps int, callback func(*Terrain, int)) {
-	//this.placeAgents(agents)
 	passDays := 0
 	for true {
 		livingAgents := this.filterLivingAgents()
@@ -34,4 +33,16 @@ func (this *World) filterLivingAgents() []*Agent {
 		}
 	}
 	return result
+}
+
+func (this *Terrain) cleanDeath() {
+	for y := 0; y < this.Height; y++ {
+		for x := 0; x < this.Width; x++ {
+			currentCell := this.GetCell(x, y)
+			if currentCell.Agent != nil && !currentCell.Agent.IsAlive() {
+				currentCell.Agent = nil
+				currentCell.CellType = EmptyCell
+			}
+		}
+	}
 }

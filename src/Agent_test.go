@@ -16,6 +16,10 @@ func TestNextDay(t *testing.T) {
 		Brain: Brain{
 			Commands: []int{0, 0, 0, 0},
 		},
+		Coords: Coords{
+			X: 0,
+			Y: 0,
+		},
 	}
 
 	for i := 0; i < 4; i++ {
@@ -29,7 +33,22 @@ func TestNextDay(t *testing.T) {
 		agent.CommandList.Commands = append(agent.CommandList.Commands, command)
 	}
 
-	agent.NextDay(&World{}, 10)
+	agent.NextDay(&World{
+		Terrain: Terrain{
+			Cells: []Cell{Cell{
+				Coords: Coords{
+					X: 0,
+					Y: 0,
+				},
+				CellType: LockedCell,
+				Cost:     0,
+				Agent:    &agent,
+			}},
+			Width:  1,
+			Height: 1,
+		},
+		populationController: Population{},
+	}, 10)
 
 	if agent.IsAlive() {
 		t.Errorf("Agent shouldn't be alive with negative energy")

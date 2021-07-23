@@ -24,7 +24,8 @@ func TestRunDay(t *testing.T) {
 	}
 
 	terrain := Terrain{}
-	terrain.Generate(5, 5, agents, 30, 10)
+	terrain.Generate(5, 5, 30, 10)
+	terrain.placeAgents(agents)
 
 	world := World{
 		Terrain: terrain,
@@ -70,7 +71,8 @@ func TestWorld_Action(t *testing.T) {
 	}
 
 	terrain := Terrain{}
-	terrain.Generate(25, 25, agents, 10, 16)
+	terrain.Generate(25, 25, 10, 16)
+	terrain.placeAgents(agents)
 
 	world := World{
 		Terrain: terrain,

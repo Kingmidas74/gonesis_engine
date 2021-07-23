@@ -129,7 +129,7 @@ func TestWorld_Action_SpecificAgent(t *testing.T) {
 
 	agents := make([]Agent, 0)
 	agents = append(agents, Agent{
-		Energy: 4,
+		Energy: 2,
 		Brain: Brain{
 			CommandList: CommandList{Commands: []Command{moveCommand, eatCommand}},
 			Commands: []int{

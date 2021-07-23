@@ -39,11 +39,11 @@ func drawFrame(terrain *Terrain, frameNumber int) {
 
 	for currentLatitude := 0; currentLatitude < terrain.Width; currentLatitude++ {
 		for currentLongitude := 0; currentLongitude < terrain.Height; currentLongitude++ {
-			if currentCell := terrain.GetCell(currentLatitude, currentLongitude); currentCell.CellType == Empty {
+			if currentCell := terrain.GetCell(currentLatitude, currentLongitude); currentCell.CellType == EmptyCell {
 				draw.Draw(m, image.Rect(currentLatitude*cellzoom, currentLongitude*cellzoom, currentLatitude*cellzoom+cellzoom, currentLongitude*cellzoom+cellzoom), &image.Uniform{C: emptycolor}, image.Point{}, draw.Src)
-			} else if currentCell.CellType == Locked {
+			} else if currentCell.CellType == LockedCell {
 				draw.Draw(m, image.Rect(currentLatitude*cellzoom, currentLongitude*cellzoom, currentLatitude*cellzoom+cellzoom, currentLongitude*cellzoom+cellzoom), &image.Uniform{C: color.RGBA{R: 0, G: 0, B: 255, A: uint8(modLikePython(255+currentCell.Agent.Generation*10, 255))}}, image.Point{}, draw.Src)
-			} else if currentCell.CellType == Organic {
+			} else if currentCell.CellType == OrganicCell {
 				draw.Draw(m, image.Rect(currentLatitude*cellzoom, currentLongitude*cellzoom, currentLatitude*cellzoom+cellzoom, currentLongitude*cellzoom+cellzoom), &image.Uniform{C: organiccolor}, image.Point{}, draw.Src)
 			}
 		}

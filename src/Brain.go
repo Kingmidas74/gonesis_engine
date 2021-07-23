@@ -11,7 +11,7 @@ func (this *Brain) SetAddress(address int) {
 }
 
 func (this *Brain) GetCurrentCommand() *Command {
-	currentCommandIdentifier := this.Commands[modLikePython(this.CurrentAddress, len(this.Commands))]
+	currentCommandIdentifier := this.GetCommandIdentifier(this.CurrentAddress)
 	currentCommand := this.CommandList.GetCommandByIdentifier(currentCommandIdentifier)
 
 	if currentCommand == nil {

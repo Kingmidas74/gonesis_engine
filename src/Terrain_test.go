@@ -15,11 +15,11 @@ func TestTerrain_SetCell(t *testing.T) {
 	terrain := Terrain{}
 	terrain.Generate(width, height, nil, organicProbability, emptyCellsCount)
 
-	terrain.SetCell(-2, 5, Cell{CellType: Obstacle})
+	terrain.SetCell(-2, 5, Cell{CellType: ObstacleCell})
 
 	cellType := terrain.GetCell(-2, 5).CellType
 
-	if cellType != Obstacle {
+	if cellType != ObstacleCell {
 		t.Errorf("set cell works incorrect")
 	}
 }
@@ -27,9 +27,9 @@ func TestTerrain_SetCell(t *testing.T) {
 func TestGenerateWithAgent_Success(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 
-	agents := make([]Agent, 0)
+	agents := make([]*Agent, 0)
 	for i := 0; i < 10; i++ {
-		agents = append(agents, Agent{
+		agents = append(agents, &Agent{
 			Energy: 20,
 		})
 	}
@@ -49,7 +49,7 @@ func TestGenerateWithAgent_Success(t *testing.T) {
 	freeSpace := 0
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
-			if currentCell := terrain.GetCell(x, y); currentCell.CellType == Empty {
+			if currentCell := terrain.GetCell(x, y); currentCell.CellType == EmptyCell {
 				if currentCell.Cost != 0 {
 					t.Errorf("Free space shouldn't cost anything")
 				}
@@ -62,7 +62,7 @@ func TestGenerateWithAgent_Success(t *testing.T) {
 		t.Errorf("not enought free space")
 	}
 
-	if &agents[0] != terrain.GetCell(agents[0].X, agents[0].Y).Agent {
+	if agents[0] != terrain.GetCell(agents[0].X, agents[0].Y).Agent {
 		t.Errorf("agents weren't linked")
 	}
 
@@ -87,7 +87,7 @@ func TestGenerateWithoutAgents_Success(t *testing.T) {
 	freeSpace := 0
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
-			if currentCell := terrain.GetCell(x, y); currentCell.CellType == Empty {
+			if currentCell := terrain.GetCell(x, y); currentCell.CellType == EmptyCell {
 				if currentCell.Cost != 0 {
 					t.Errorf("Free space shouldn't cost anything")
 				}

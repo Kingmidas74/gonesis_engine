@@ -19,24 +19,24 @@ func getTargetCell(world *World, agent *Agent, direction int) *Cell {
 	targetY := agent.Coords.Y
 
 	switch direction {
-	case North:
+	case NorthDirection:
 		targetY -= 1
-	case NorthEast:
+	case NorthEastDirection:
 		targetY -= 1
 		targetX += 1
-	case East:
+	case EastDirection:
 		targetX += 1
-	case SouthEast:
+	case SouthEastDirection:
 		targetX += 1
 		targetY += 1
-	case South:
+	case SouthDirection:
 		targetY += 1
-	case SouthWest:
+	case SouthWestDirection:
 		targetX -= 1
 		targetY += 1
-	case West:
+	case WestDirection:
 		targetX -= 1
-	case NorthWest:
+	case NorthWestDirection:
 		targetX -= 1
 		targetY -= 1
 	}
@@ -54,13 +54,13 @@ var (
 			direction := modLikePython(argument, 8)
 			targetCell := getTargetCell(world, agent, direction)
 
-			if targetCell.CellType == Empty {
+			if targetCell.CellType == EmptyCell {
 				agent.X = targetCell.X
 				agent.Y = targetCell.Y
 				targetCell.Agent = agent
-				targetCell.CellType = Locked
+				targetCell.CellType = LockedCell
 				currentCell.Agent = nil
-				currentCell.CellType = Empty
+				currentCell.CellType = EmptyCell
 
 			}
 
@@ -77,14 +77,14 @@ var (
 			direction := modLikePython(argument, 8)
 			targetCell := getTargetCell(world, agent, direction)
 
-			if targetCell.CellType == Organic {
+			if targetCell.CellType == OrganicCell {
 				agent.X = targetCell.X
 				agent.Y = targetCell.Y
 				agent.Energy += targetCell.Cost
 				targetCell.Agent = agent
-				targetCell.CellType = Locked
+				targetCell.CellType = LockedCell
 				currentCell.Agent = nil
-				currentCell.CellType = Empty
+				currentCell.CellType = EmptyCell
 			}
 
 			agent.Brain.MoveAddressOn(2)

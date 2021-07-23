@@ -28,7 +28,7 @@ func (this *Terrain) SetCell(x, y int, cell Cell) {
 	this.Cells[this.getCellIndex(x, y)] = cell
 }
 
-func (this *Terrain) Generate(width, height int, agents []Agent, organicProbability int, emptyCellsCount int) {
+func (this *Terrain) Generate(width, height int, agents []*Agent, organicProbability int, emptyCellsCount int) {
 	this.Width, this.Height = width, height
 
 	this.Cells = make([]Cell, width*height)
@@ -49,7 +49,7 @@ func (this *Terrain) Generate(width, height int, agents []Agent, organicProbabil
 
 			currentOrganicProbability := randomIntBetween(1, 100)
 			if organicCellsCount < width*height-(emptyCellsCount) && organicProbability > currentOrganicProbability {
-				currentCell.CellType = Organic
+				currentCell.CellType = OrganicCell
 				currentCell.Cost = randomIntBetween(1, 10)
 				organicCellsCount++
 			}
@@ -70,15 +70,15 @@ func (this *Terrain) Generate(width, height int, agents []Agent, organicProbabil
 	this.placeAgents(agents)
 }
 
-func (this *Terrain) placeAgents(agents []Agent) {
+func (this *Terrain) placeAgents(agents []*Agent) {
 	if agents == nil {
 		return
 	}
 
 	for i := 0; i < len(this.Cells); i++ {
-		if this.Cells[i].CellType == Locked || this.Cells[i].Agent != nil {
+		if this.Cells[i].CellType == LockedCell || this.Cells[i].Agent != nil {
 			this.Cells[i].Agent = nil
-			this.Cells[i].CellType = Empty
+			this.Cells[i].CellType = EmptyCell
 		}
 	}
 
@@ -90,11 +90,11 @@ func (this *Terrain) placeAgents(agents []Agent) {
 				if (x == 0 || y == 0 || x == this.Width-1 || y == this.Height-1) && randomIntBetween(0, 101) > 50 && placedAgentsCount < len(agents) {
 					currentCell := this.GetCell(x, y)
 
-					agent := &agents[placedAgentsCount]
+					agent := agents[placedAgentsCount]
 					currentCell.Agent = agent
 					agent.X = x
 					agent.Y = y
-					currentCell.CellType = Locked
+					currentCell.CellType = LockedCell
 					placedAgentsCount++
 
 				}
@@ -110,7 +110,7 @@ func (this *Terrain) cleanDeath() {
 			currentCell := this.GetCell(x, y)
 			if currentCell.Agent != nil && !currentCell.Agent.IsAlive() {
 				currentCell.Agent = nil
-				currentCell.CellType = Empty
+				currentCell.CellType = EmptyCell
 			}
 		}
 	}

@@ -3,10 +3,10 @@ package gonesis
 type CellType byte
 
 const (
-	Empty    = 0
-	Locked   = 1
-	Organic  = 2
-	Obstacle = 3
+	EmptyCell    = 0
+	LockedCell   = 1
+	OrganicCell  = 2
+	ObstacleCell = 3
 )
 
 type Cell struct {

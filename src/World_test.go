@@ -120,3 +120,88 @@ func TestWorld_Action(t *testing.T) {
 	world.Action(agents, 50, drawFrame)
 
 }
+
+func TestWorld_Action_SpecificAgent(t *testing.T) {
+
+	rand.Seed(time.Now().UnixNano())
+
+	//randCommandIndices := rand.Perm(10)
+
+	agents := make([]Agent, 0)
+	agents = append(agents, Agent{
+		Energy: 4,
+		Brain: Brain{
+			CommandList: CommandList{Commands: []Command{moveCommand, eatCommand}},
+			Commands: []int{
+				0, 4, //down
+				1, 4, //eat down
+				0, 2, //right
+				1, 2, //eat right
+				8,
+			},
+		},
+		Coords: Coords{
+			X: 1,
+			Y: 0,
+		},
+	})
+
+	terrain := Terrain{
+		Cells:  make([]Cell, 0),
+		Width:  10,
+		Height: 5,
+	}
+	for y := 0; y < terrain.Height; y++ {
+		for x := 0; x < terrain.Width; x++ {
+			terrain.Cells = append(terrain.Cells, Cell{
+				Coords: Coords{
+					X: x,
+					Y: y,
+				},
+				CellType: Empty,
+				Cost:     0,
+			})
+		}
+	}
+	terrain.Cells[1].CellType = Locked
+	terrain.Cells[1].Agent = &agents[0]
+
+	terrain.Cells[21].CellType = Organic
+	terrain.Cells[21].Cost = 3
+
+	terrain.Cells[23].CellType = Organic
+	terrain.Cells[23].Cost = 3
+
+	terrain.Cells[43].CellType = Organic
+	terrain.Cells[43].Cost = 3
+
+	terrain.Cells[45].CellType = Organic
+	terrain.Cells[45].Cost = 3
+
+	terrain.Cells[15].CellType = Organic
+	terrain.Cells[15].Cost = 3
+
+	terrain.Cells[17].CellType = Organic
+	terrain.Cells[17].Cost = 3
+
+	terrain.Cells[37].CellType = Organic
+	terrain.Cells[37].Cost = 3
+
+	terrain.Cells[39].CellType = Organic
+	terrain.Cells[39].Cost = 3
+
+	terrain.Cells[9].CellType = Organic
+	terrain.Cells[9].Cost = 3
+
+	world := World{
+		Terrain: terrain,
+		populationController: Population{
+			NextGenerationLine:  0,
+			MutationProbability: 0,
+			Size:                1,
+		},
+	}
+
+	world.Action(agents, 1, drawFrame)
+
+}

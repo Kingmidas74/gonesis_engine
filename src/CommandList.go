@@ -50,7 +50,7 @@ var (
 		Handler: func(world *World, agent *Agent) {
 			currentCell := world.GetCell(agent.X, agent.Y)
 
-			argument := 0 //agent.Brain.GetCommandIdentifier(agent.Brain.currentCommandAddress + 1)
+			argument := agent.Brain.GetCommandIdentifier(agent.Brain.CurrentAddress + 1)
 			direction := modLikePython(argument, 8)
 			targetCell := getTargetCell(world, agent, direction)
 
@@ -73,7 +73,7 @@ var (
 		Handler: func(world *World, agent *Agent) {
 			currentCell := world.GetCell(agent.X, agent.Y)
 
-			argument := 0 // agent.Brain.GetCommandIdentifier(agent.Brain.currentCommandAddress + 1)
+			argument := agent.Brain.GetCommandIdentifier(agent.Brain.CurrentAddress + 1)
 			direction := modLikePython(argument, 8)
 			targetCell := getTargetCell(world, agent, direction)
 

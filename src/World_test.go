@@ -92,7 +92,7 @@ func TestWorld_Action(t *testing.T) {
 
 	rand.Seed(time.Now().UnixNano())
 
-	randCommandIndices := []int{0, 0, 0, 0, 1, 0, 1, 0, 0, 0}
+	randCommandIndices := rand.Perm(10)
 
 	agents := make([]Agent, 0)
 	for i := 0; i < 1; i++ {
@@ -111,12 +111,12 @@ func TestWorld_Action(t *testing.T) {
 	world := World{
 		Terrain: terrain,
 		populationController: Population{
-			NextGenerationLine:  1,
+			NextGenerationLine:  2,
 			MutationProbability: 0,
-			Size:                2,
+			Size:                10,
 		},
 	}
 
-	world.Action(agents, 50, 1, drawFrame)
+	world.Action(agents, 50, drawFrame)
 
 }

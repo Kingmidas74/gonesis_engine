@@ -5,10 +5,7 @@ type World struct {
 	populationController Population
 }
 
-func (this *World) Action(agents []Agent, maxDays, maxSteps int, callback func(*Terrain, int)) {
-	if len(agents) == 0 {
-		return
-	}
+func (this *World) Action(agents []Agent, maxSteps int, callback func(*Terrain, int)) {
 	passDays := 0
 	for true {
 		isNewGeneration, newAgents, err := this.evaluateAgents(agents)
@@ -18,10 +15,12 @@ func (this *World) Action(agents []Agent, maxDays, maxSteps int, callback func(*
 			agents = newAgents
 			this.placeAgents(agents)
 		}
+		if len(agents) == 0 {
+			return
+		}
+		this.cleanDeath()
 		callback(&this.Terrain, passDays)
 		this.runDay(agents, maxSteps)
-
-		maxDays--
 		passDays++
 	}
 }

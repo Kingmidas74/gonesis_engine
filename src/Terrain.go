@@ -103,3 +103,15 @@ func (this *Terrain) placeAgents(agents []Agent) {
 	}
 
 }
+
+func (this *Terrain) cleanDeath() {
+	for y := 0; y < this.Height; y++ {
+		for x := 0; x < this.Width; x++ {
+			currentCell := this.GetCell(x, y)
+			if currentCell.Agent != nil && !currentCell.Agent.IsAlive() {
+				currentCell.Agent = nil
+				currentCell.CellType = Empty
+			}
+		}
+	}
+}

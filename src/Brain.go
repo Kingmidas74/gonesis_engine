@@ -11,12 +11,13 @@ func (this *Brain) SetAddress(address int) {
 }
 
 func (this *Brain) GetCurrentCommand() *Command {
-	currentCommand := this.CommandList.GetCommandByIdentifier(this.Commands[modLikePython(this.CurrentAddress, len(this.Commands))])
+	currentCommandIdentifier := this.Commands[modLikePython(this.CurrentAddress, len(this.Commands))]
+	currentCommand := this.CommandList.GetCommandByIdentifier(currentCommandIdentifier)
 
-	for currentCommand == nil {
-		this.MoveAddressOn(this.Commands[modLikePython(this.CurrentAddress, len(this.Commands))])
-		currentCommand = this.CommandList.GetCommandByIdentifier(this.Commands[modLikePython(this.CurrentAddress, len(this.Commands))])
+	if currentCommand == nil {
+		this.MoveAddressOn(currentCommandIdentifier)
 	}
+
 	return currentCommand
 }
 

@@ -12,10 +12,6 @@ type Brain struct {
 	CurrentAddress int
 }
 
-func (this *Brain) SetAddress(address int) {
-	this.CurrentAddress = utils.ModLikePython(address, len(this.Commands))
-}
-
 func (this *Brain) GetCurrentCommand() contracts.ICommand {
 	currentCommandIdentifier := this.GetCommandIdentifier(this.CurrentAddress)
 	currentCommand := this.CommandList.GetCommandByIdentifier(currentCommandIdentifier)
@@ -28,7 +24,7 @@ func (this *Brain) GetCurrentCommand() contracts.ICommand {
 }
 
 func (this *Brain) MoveAddressOn(delta int) {
-	this.SetAddress(this.CurrentAddress + delta)
+	this.SetCurrentAddress(this.CurrentAddress + delta)
 }
 
 func (this *Brain) GetCommandIdentifier(address int) int {
@@ -37,4 +33,19 @@ func (this *Brain) GetCommandIdentifier(address int) int {
 
 func (this *Brain) GetCurrentAddress() int {
 	return this.CurrentAddress
+}
+
+func (this *Brain) SetCurrentAddress(address int) {
+	this.CurrentAddress = utils.ModLikePython(address, len(this.Commands))
+}
+
+func (this *Brain) Clone() contracts.IBrain {
+	newBrain := *this
+	newBrain.SetCurrentAddress(0)
+	return &newBrain
+}
+
+func (this *Brain) Mutate() {
+	randomIndex := utils.RandomIntBetween(0, len(this.Commands)-1)
+	this.Commands[randomIndex] = utils.RandomIntBetween(0, len(this.Commands)-1)
 }

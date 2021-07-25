@@ -17,5 +17,9 @@ type IAgent interface {
 	IsAlive() bool
 
 	GetBrain() IBrain
+	SetBrain(brain IBrain)
+
 	GetAge() int
+
+	MakeChild() IAgent
 }

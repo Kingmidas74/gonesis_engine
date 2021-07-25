@@ -7,6 +7,7 @@ import (
 	"github.com/Kingmidas74/gonesis/core/agents"
 	"github.com/Kingmidas74/gonesis/core/commands"
 	"github.com/Kingmidas74/gonesis/core/primitives"
+	"github.com/Kingmidas74/gonesis/core/reproductions"
 	"github.com/Kingmidas74/gonesis/core/terrains"
 	"github.com/Kingmidas74/gonesis/gui"
 	"math/rand"
@@ -19,7 +20,7 @@ func TestWorld_Action_SpecificAgent(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 
 	agent := agents.Agent{
-		Brain: core.Brain{
+		IBrain: &core.Brain{
 			CommandList: commands.CommandList{
 				Commands: []contracts.ICommand{
 					&preparedCommands.MoveCommand{
@@ -49,9 +50,11 @@ func TestWorld_Action_SpecificAgent(t *testing.T) {
 			X: 1,
 			Y: 0,
 		},
-		Energy:            2,
-		ReproductionPower: 50,
-		Generation:        0,
+		IReproduction: &reproductions.BuddingReproduction{
+			ReproductionPower: 50,
+		},
+		Energy:     2,
+		Generation: 0,
 	}
 
 	terrain := terrains.MooreTerrain{
@@ -119,7 +122,7 @@ func TestWorld_Action_SpecificAgentWithChild(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
 
 	agent := agents.Agent{
-		Brain: core.Brain{
+		IBrain: &core.Brain{
 			CommandList: commands.CommandList{
 				Commands: []contracts.ICommand{
 					&preparedCommands.MoveCommand{
@@ -149,9 +152,12 @@ func TestWorld_Action_SpecificAgentWithChild(t *testing.T) {
 			X: 1,
 			Y: 0,
 		},
-		Energy:            2,
-		ReproductionPower: 10,
-		Generation:        0,
+		IReproduction: &reproductions.BuddingReproduction{
+			ReproductionPower:   10,
+			MutationProbability: 100,
+		},
+		Energy:     2,
+		Generation: 0,
 	}
 
 	terrain := terrains.MooreTerrain{

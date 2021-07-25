@@ -2,13 +2,13 @@ package agents
 
 import (
 	"github.com/Kingmidas74/gonesis/contracts"
-	"github.com/Kingmidas74/gonesis/core"
 	"github.com/Kingmidas74/gonesis/core/primitives"
 )
 
 type Agent struct {
-	core.Brain
+	contracts.IBrain
 	primitives.Coords
+	contracts.IReproduction
 
 	Energy int
 
@@ -34,7 +34,11 @@ func (this *Agent) SetEnergy(energy int) {
 }
 
 func (this *Agent) GetBrain() contracts.IBrain {
-	return &this.Brain
+	return this.IBrain
+}
+
+func (this *Agent) SetBrain(brain contracts.IBrain) {
+	this.IBrain = brain
 }
 
 func (this *Agent) GetAge() int {
@@ -58,42 +62,10 @@ func (this *Agent) NextDay(terrain contracts.ITerrain, maxSteps int) {
 			break
 		}
 	}
-	this.tryToReproduce(terrain)
+	this.TryToReproduce(this, terrain)
 }
-
-func (this *Agent) tryToReproduce(terrain contracts.ITerrain) {
-	if child, freeCell := this.makeChild(), this.findEmptyNeighborCell(terrain); child != nil && freeCell != nil {
-		freeCell.SetCellType(contracts.LockedCell)
-		child.SetX(freeCell.GetX())
-		child.SetY(freeCell.GetY())
-		freeCell.SetAgent(child)
-
+func (this *Agent) MakeChild() contracts.IAgent {
+	return &Agent{
+		IReproduction: this.IReproduction,
 	}
-}
-
-func (this *Agent) makeChild() *Agent {
-	if this.Energy >= this.ReproductionPower {
-		child := &Agent{
-			Brain:             this.Brain,
-			Energy:            this.ReproductionPower,
-			ReproductionPower: this.ReproductionPower,
-			Generation:        this.Generation + 1,
-		}
-		child.CurrentAddress = 0
-
-		this.Energy -= this.ReproductionPower
-		return child
-	}
-	return nil
-}
-
-func (this *Agent) findEmptyNeighborCell(terrain contracts.ITerrain) contracts.ICell {
-	cells := terrain.GetNeighbors(this.X, this.Y)
-
-	for i := 0; i < len(cells); i++ {
-		if cell := cells[i]; cell.GetCellType() == contracts.EmptyCell {
-			return cell
-		}
-	}
-	return nil
 }

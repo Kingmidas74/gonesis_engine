@@ -5,49 +5,43 @@ import (
 	"github.com/Kingmidas74/gonesis/utils"
 )
 
+type HexDirection int
+
+const (
+	HexUpLeft    HexDirection = 0
+	HexUpRight   HexDirection = 1
+	HexRight     HexDirection = 2
+	HexDownRight HexDirection = 3
+	HexDownLeft  HexDirection = 4
+	HexLeft      HexDirection = 5
+)
+
 type HexTerrain struct {
 	Terrain
 }
 
 func (this *HexTerrain) GetNeighbor(x, y int, direction int) contracts.ICell {
-	direction = utils.ModLikePython(direction, 6)
-	targetX := x
-	targetY := y
-
-	switch direction {
-	case 0:
-		targetX -= 1
-		targetY -= 1
-	case 1:
-		targetY -= 1
-	case 2:
-		targetX -= 1
-	case 3:
-		targetX += 1
-	case 4:
-		targetX -= 1
-		targetY += 1
-	case 5:
-		targetY += 1
-	}
-	return this.GetCell(targetX, targetY)
+	multiples := this.getCoordsMultiples()
+	hexDirection := HexDirection(utils.ModLikePython(direction, len(multiples)))
+	return this.GetCell(x+multiples[hexDirection][0], y+multiples[hexDirection][1])
 }
 
 func (this *HexTerrain) GetNeighbors(x, y int) []contracts.ICell {
 	result := make([]contracts.ICell, 0)
 
-	coords := []int{
-		x - 1, y - 1,
-		x, y - 1,
-
-		x - 1, y,
-		x + 1, y,
-
-		x - 1, y + 1,
-		x, y + 1,
-	}
-	for i := 0; i < len(coords); i = i + 2 {
-		result = append(result, this.GetCell(coords[i], coords[i+1]))
+	for _, coords := range this.getCoordsMultiples() {
+		result = append(result, this.GetCell(x+coords[0], y+coords[1]))
 	}
 	return result
+}
+
+func (this *HexTerrain) getCoordsMultiples() map[HexDirection][2]int {
+	multiples := make(map[HexDirection][2]int)
+	multiples[HexUpLeft] = [2]int{-1, -1}
+	multiples[HexUpRight] = [2]int{0, -1}
+	multiples[HexRight] = [2]int{1, 0}
+	multiples[HexDownRight] = [2]int{0, 1}
+	multiples[HexDownLeft] = [2]int{-1, 1}
+	multiples[HexLeft] = [2]int{-1, 0}
+	return multiples
 }

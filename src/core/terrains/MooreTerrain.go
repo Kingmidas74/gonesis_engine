@@ -5,57 +5,47 @@ import (
 	"github.com/Kingmidas74/gonesis/utils"
 )
 
+type MooreDirection int
+
+const (
+	MooreUp        MooreDirection = 0
+	MooreUpRight   MooreDirection = 1
+	MooreRight     MooreDirection = 2
+	MooreDownRight MooreDirection = 3
+	MooreDown      MooreDirection = 4
+	MooreDownLeft  MooreDirection = 5
+	MooreLeft      MooreDirection = 6
+	MooreUpLeft    MooreDirection = 7
+)
+
 type MooreTerrain struct {
 	Terrain
 }
 
 func (this *MooreTerrain) GetNeighbor(x, y int, direction int) contracts.ICell {
-	direction = utils.ModLikePython(direction, 8)
-	targetX := x
-	targetY := y
-
-	switch direction {
-	case 0:
-		targetY -= 1
-	case 1:
-		targetY -= 1
-		targetX += 1
-	case 2:
-		targetX += 1
-	case 3:
-		targetX += 1
-		targetY += 1
-	case 4:
-		targetY += 1
-	case 5:
-		targetX -= 1
-		targetY += 1
-	case 6:
-		targetX -= 1
-	case 7:
-		targetX -= 1
-		targetY -= 1
-	}
-	return this.GetCell(targetX, targetY)
+	multiples := this.getCoordsMultiples()
+	mooreDirection := MooreDirection(utils.ModLikePython(direction, len(multiples)))
+	return this.GetCell(x+multiples[mooreDirection][0], y+multiples[mooreDirection][1])
 }
 
 func (this *MooreTerrain) GetNeighbors(x, y int) []contracts.ICell {
 	result := make([]contracts.ICell, 0)
 
-	coords := []int{
-		x - 1, y - 1,
-		x, y - 1,
-		x + 1, y - 1,
-
-		x - 1, y,
-		x + 1, y,
-
-		x - 1, y + 1,
-		x, y + 1,
-		x + 1, y + 1,
-	}
-	for i := 0; i < len(coords); i = i + 2 {
-		result = append(result, this.GetCell(coords[i], coords[i+1]))
+	for _, coords := range this.getCoordsMultiples() {
+		result = append(result, this.GetCell(x+coords[0], y+coords[1]))
 	}
 	return result
+}
+
+func (this *MooreTerrain) getCoordsMultiples() map[MooreDirection][2]int {
+	multiples := make(map[MooreDirection][2]int)
+	multiples[MooreUp] = [2]int{0, -1}
+	multiples[MooreUpRight] = [2]int{1, -1}
+	multiples[MooreRight] = [2]int{1, 0}
+	multiples[MooreDownRight] = [2]int{1, 1}
+	multiples[MooreDown] = [2]int{0, 1}
+	multiples[MooreDownLeft] = [2]int{-1, 1}
+	multiples[MooreLeft] = [2]int{-1, 0}
+	multiples[MooreUpLeft] = [2]int{-1, -1}
+	return multiples
 }

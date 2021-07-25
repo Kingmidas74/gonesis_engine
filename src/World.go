@@ -7,22 +7,17 @@ type World struct {
 }
 
 func (this *World) Action(maxSteps int, callback func(contracts.ITerrain, int)) {
-	passDays := 0
-	for true {
-		livingAgents := this.filterLivingAgents()
-		if len(livingAgents) == 0 {
-			return
-		}
-		this.cleanDeath()
-		callback(this.ITerrain, passDays)
+	callback(this.ITerrain, 0)
+	for currentDay, livingAgents := 1, this.filterLivingAgents(); len(livingAgents) > 0; currentDay, livingAgents = currentDay+1, this.filterLivingAgents() {
 		this.runDay(livingAgents, maxSteps)
-		passDays++
+		this.cleanDeath()
+		callback(this.ITerrain, currentDay)
 	}
 }
 
 func (this *World) runDay(agents []contracts.IAgent, maxSteps int) {
-	for i := 0; i < len(agents); i++ {
-		agents[i].NextDay(this.ITerrain, maxSteps)
+	for _, agent := range agents {
+		agent.NextDay(this.ITerrain, maxSteps)
 	}
 }
 

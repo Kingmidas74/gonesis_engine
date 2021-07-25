@@ -24,22 +24,6 @@ func (this *Agent) SetGeneration(generation int) {
 	this.Generation = generation
 }
 
-func (this *Agent) GetX() int {
-	return this.X
-}
-
-func (this *Agent) SetX(x int) {
-	this.X = x
-}
-
-func (this *Agent) GetY() int {
-	return this.Y
-}
-
-func (this *Agent) SetY(y int) {
-	this.Y = y
-}
-
 func (this *Agent) GetEnergy() int {
 	return this.Energy
 }

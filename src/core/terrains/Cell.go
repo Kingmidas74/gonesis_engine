@@ -21,22 +21,6 @@ func (this *Cell) SetCellType(cellType contracts.CellType) {
 	this.CellType = cellType
 }
 
-func (this *Cell) GetX() int {
-	return this.X
-}
-
-func (this *Cell) SetX(x int) {
-	this.X = x
-}
-
-func (this *Cell) GetY() int {
-	return this.Y
-}
-
-func (this *Cell) SetY(y int) {
-	this.Y = y
-}
-
 func (this *Cell) GetAgent() contracts.IAgent {
 	return this.Agent
 }

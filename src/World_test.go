@@ -1,7 +1,7 @@
 package gonesis
 
 import (
-	commands2 "github.com/Kingmidas74/gonesis/commands"
+	preparedCommands "github.com/Kingmidas74/gonesis/commands"
 	"github.com/Kingmidas74/gonesis/contracts"
 	"github.com/Kingmidas74/gonesis/core"
 	"github.com/Kingmidas74/gonesis/core/agents"
@@ -22,13 +22,13 @@ func TestWorld_Action_SpecificAgent(t *testing.T) {
 		Brain: core.Brain{
 			CommandList: commands.CommandList{
 				Commands: []contracts.ICommand{
-					&commands2.MoveCommand{
+					&preparedCommands.MoveCommand{
 						commands.Command{
 							IsInterrupt: true,
 							Identifier:  0,
 						},
 					},
-					&commands2.EatCommand{
+					&preparedCommands.EatCommand{
 						commands.Command{
 							IsInterrupt: false,
 							Identifier:  1,
@@ -122,13 +122,13 @@ func TestWorld_Action_SpecificAgentWithChild(t *testing.T) {
 		Brain: core.Brain{
 			CommandList: commands.CommandList{
 				Commands: []contracts.ICommand{
-					&commands2.MoveCommand{
+					&preparedCommands.MoveCommand{
 						commands.Command{
 							IsInterrupt: true,
 							Identifier:  0,
 						},
 					},
-					&commands2.EatCommand{
+					&preparedCommands.EatCommand{
 						commands.Command{
 							IsInterrupt: false,
 							Identifier:  1,

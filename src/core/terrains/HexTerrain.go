@@ -7,15 +7,6 @@ import (
 
 type HexDirection int
 
-const (
-	HexUpLeft    HexDirection = 0
-	HexUpRight   HexDirection = 1
-	HexRight     HexDirection = 2
-	HexDownRight HexDirection = 3
-	HexDownLeft  HexDirection = 4
-	HexLeft      HexDirection = 5
-)
-
 type HexTerrain struct {
 	Terrain
 }
@@ -36,12 +27,21 @@ func (this *HexTerrain) GetNeighbors(x, y int) []contracts.ICell {
 }
 
 func (this *HexTerrain) getCoordsMultiples() map[HexDirection][2]int {
+	const (
+		UpLeft    HexDirection = 0
+		UpRight   HexDirection = 1
+		Right     HexDirection = 2
+		DownRight HexDirection = 3
+		DownLeft  HexDirection = 4
+		Left      HexDirection = 5
+	)
+
 	multiples := make(map[HexDirection][2]int)
-	multiples[HexUpLeft] = [2]int{-1, -1}
-	multiples[HexUpRight] = [2]int{0, -1}
-	multiples[HexRight] = [2]int{1, 0}
-	multiples[HexDownRight] = [2]int{0, 1}
-	multiples[HexDownLeft] = [2]int{-1, 1}
-	multiples[HexLeft] = [2]int{-1, 0}
+	multiples[UpLeft] = [2]int{-1, -1}
+	multiples[UpRight] = [2]int{0, -1}
+	multiples[Right] = [2]int{1, 0}
+	multiples[DownRight] = [2]int{0, 1}
+	multiples[DownLeft] = [2]int{-1, 1}
+	multiples[Left] = [2]int{-1, 0}
 	return multiples
 }

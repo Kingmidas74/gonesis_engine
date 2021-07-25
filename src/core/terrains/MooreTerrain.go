@@ -7,17 +7,6 @@ import (
 
 type MooreDirection int
 
-const (
-	MooreUp        MooreDirection = 0
-	MooreUpRight   MooreDirection = 1
-	MooreRight     MooreDirection = 2
-	MooreDownRight MooreDirection = 3
-	MooreDown      MooreDirection = 4
-	MooreDownLeft  MooreDirection = 5
-	MooreLeft      MooreDirection = 6
-	MooreUpLeft    MooreDirection = 7
-)
-
 type MooreTerrain struct {
 	Terrain
 }
@@ -38,14 +27,25 @@ func (this *MooreTerrain) GetNeighbors(x, y int) []contracts.ICell {
 }
 
 func (this *MooreTerrain) getCoordsMultiples() map[MooreDirection][2]int {
+	const (
+		Up        MooreDirection = 0
+		UpRight   MooreDirection = 1
+		Right     MooreDirection = 2
+		DownRight MooreDirection = 3
+		Down      MooreDirection = 4
+		DownLeft  MooreDirection = 5
+		Left      MooreDirection = 6
+		UpLeft    MooreDirection = 7
+	)
+
 	multiples := make(map[MooreDirection][2]int)
-	multiples[MooreUp] = [2]int{0, -1}
-	multiples[MooreUpRight] = [2]int{1, -1}
-	multiples[MooreRight] = [2]int{1, 0}
-	multiples[MooreDownRight] = [2]int{1, 1}
-	multiples[MooreDown] = [2]int{0, 1}
-	multiples[MooreDownLeft] = [2]int{-1, 1}
-	multiples[MooreLeft] = [2]int{-1, 0}
-	multiples[MooreUpLeft] = [2]int{-1, -1}
+	multiples[Up] = [2]int{0, -1}
+	multiples[UpRight] = [2]int{1, -1}
+	multiples[Right] = [2]int{1, 0}
+	multiples[DownRight] = [2]int{1, 1}
+	multiples[Down] = [2]int{0, 1}
+	multiples[DownLeft] = [2]int{-1, 1}
+	multiples[Left] = [2]int{-1, 0}
+	multiples[UpLeft] = [2]int{-1, -1}
 	return multiples
 }

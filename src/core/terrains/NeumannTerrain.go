@@ -7,13 +7,6 @@ import (
 
 type NeumannDirection int
 
-const (
-	NeumannUp    NeumannDirection = 0
-	NeumannRight NeumannDirection = 1
-	NeumannDown  NeumannDirection = 2
-	NeumannLeft  NeumannDirection = 3
-)
-
 type NeumannTerrain struct {
 	Terrain
 }
@@ -34,10 +27,17 @@ func (this *NeumannTerrain) GetNeighbors(x, y int) []contracts.ICell {
 }
 
 func (this *NeumannTerrain) getCoordsMultiples() map[NeumannDirection][2]int {
+	const (
+		Up    NeumannDirection = 0
+		Right NeumannDirection = 1
+		Down  NeumannDirection = 2
+		Left  NeumannDirection = 3
+	)
+
 	multiples := make(map[NeumannDirection][2]int)
-	multiples[NeumannUp] = [2]int{0, -1}
-	multiples[NeumannRight] = [2]int{1, 0}
-	multiples[NeumannDown] = [2]int{0, 1}
-	multiples[NeumannLeft] = [2]int{-1, 0}
+	multiples[Up] = [2]int{0, -1}
+	multiples[Right] = [2]int{1, 0}
+	multiples[Down] = [2]int{0, 1}
+	multiples[Left] = [2]int{-1, 0}
 	return multiples
 }

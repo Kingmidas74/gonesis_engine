@@ -1,104 +1,41 @@
 package gonesis
 
 import (
-	"fmt"
+	commands2 "github.com/Kingmidas74/gonesis/commands"
+	"github.com/Kingmidas74/gonesis/contracts"
+	"github.com/Kingmidas74/gonesis/core"
+	"github.com/Kingmidas74/gonesis/core/agents"
+	"github.com/Kingmidas74/gonesis/core/commands"
+	"github.com/Kingmidas74/gonesis/core/primitives"
+	"github.com/Kingmidas74/gonesis/core/terrains"
+	"github.com/Kingmidas74/gonesis/gui"
 	"math/rand"
 	"testing"
 	"time"
 )
 
-func TestRunDay(t *testing.T) {
-	randCommandIndices := []int{3, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 2, 2, 1, 1, 1, 2, 2, 3}
-	agents := make([]*Agent, 0)
-	for i := 0; i < 2; i++ {
-		rand.Shuffle(len(randCommandIndices), func(i, j int) {
-			randCommandIndices[i], randCommandIndices[j] = randCommandIndices[j], randCommandIndices[i]
-		})
-		agents = append(agents, &Agent{
-			Energy: 20,
-			Brain: Brain{
-				CommandList: CommandList{Commands: []Command{moveCommand, eatCommand}},
-				Commands:    randCommandIndices,
-			},
-		})
-	}
-
-	terrain := Terrain{}
-	terrain.Generate(5, 5, 30, 10)
-	terrain.placeAgents(agents)
-
-	world := World{
-		Terrain: terrain,
-		populationController: Population{
-			NextGenerationLine:  1,
-			MutationProbability: 0,
-			Size:                len(agents),
-		},
-	}
-	for y := 0; y < terrain.Height; y++ {
-		for x := 0; x < terrain.Width; x++ {
-			currentCell := terrain.GetCell(x, y)
-			fmt.Printf("%2d %2d | ", currentCell.CellType, currentCell.Cost)
-		}
-		println()
-	}
-	drawFrame(&terrain, 1)
-	world.runDay(agents, 3)
-
-}
-
-func TestWorld_Action(t *testing.T) {
-
-	rand.Seed(time.Now().UnixNano())
-
-	//	randCommandIndices := rand.Perm(10)
-
-	agents := make([]*Agent, 0)
-	for i := 0; i < 1; i++ {
-		agents = append(agents, &Agent{
-			Energy: 10,
-			Brain: Brain{
-				CommandList: CommandList{Commands: []Command{moveCommand, eatCommand}},
-				Commands: []int{
-					0, 4, //down
-					1, 4, //eat down
-					0, 2, //right
-					1, 2, //eat right
-					8,
-				},
-			},
-		})
-	}
-
-	terrain := Terrain{}
-	terrain.Generate(25, 25, 10, 16)
-	terrain.placeAgents(agents)
-
-	world := World{
-		Terrain: terrain,
-		populationController: Population{
-			NextGenerationLine:  2,
-			MutationProbability: 0,
-			Size:                10,
-		},
-	}
-
-	world.Action(50, drawFrame)
-
-}
-
 func TestWorld_Action_SpecificAgent(t *testing.T) {
 
 	rand.Seed(time.Now().UnixNano())
 
-	//randCommandIndices := rand.Perm(10)
-
-	agents := make([]Agent, 0)
-	agents = append(agents, Agent{
-		Energy:            2,
-		ReproductionPower: 50,
-		Brain: Brain{
-			CommandList: CommandList{Commands: []Command{moveCommand, eatCommand}},
+	agent := agents.Agent{
+		Brain: core.Brain{
+			CommandList: commands.CommandList{
+				Commands: []contracts.ICommand{
+					&commands2.MoveCommand{
+						commands.Command{
+							IsInterrupt: true,
+							Identifier:  0,
+						},
+					},
+					&commands2.EatCommand{
+						commands.Command{
+							IsInterrupt: false,
+							Identifier:  1,
+						},
+					},
+				},
+			},
 			Commands: []int{
 				0, 4, //down
 				1, 4, //eat down
@@ -106,70 +43,74 @@ func TestWorld_Action_SpecificAgent(t *testing.T) {
 				1, 2, //eat right
 				8,
 			},
+			CurrentAddress: 0,
 		},
-		Coords: Coords{
+		Coords: primitives.Coords{
 			X: 1,
 			Y: 0,
 		},
-	})
-
-	terrain := Terrain{
-		Cells:  make([]Cell, 0),
-		Width:  10,
-		Height: 5,
+		Energy:            2,
+		ReproductionPower: 50,
+		Generation:        0,
 	}
-	for y := 0; y < terrain.Height; y++ {
-		for x := 0; x < terrain.Width; x++ {
-			terrain.Cells = append(terrain.Cells, Cell{
-				Coords: Coords{
-					X: x,
-					Y: y,
-				},
-				CellType: EmptyCell,
-				Cost:     0,
-			})
-		}
-	}
-	terrain.Cells[1].CellType = LockedCell
-	terrain.Cells[1].Agent = &agents[0]
 
-	terrain.Cells[21].CellType = OrganicCell
-	terrain.Cells[21].Cost = 3
-
-	terrain.Cells[23].CellType = OrganicCell
-	terrain.Cells[23].Cost = 3
-
-	terrain.Cells[43].CellType = OrganicCell
-	terrain.Cells[43].Cost = 3
-
-	terrain.Cells[45].CellType = OrganicCell
-	terrain.Cells[45].Cost = 3
-
-	terrain.Cells[15].CellType = OrganicCell
-	terrain.Cells[15].Cost = 3
-
-	terrain.Cells[17].CellType = OrganicCell
-	terrain.Cells[17].Cost = 3
-
-	terrain.Cells[37].CellType = OrganicCell
-	terrain.Cells[37].Cost = 3
-
-	terrain.Cells[39].CellType = OrganicCell
-	terrain.Cells[39].Cost = 3
-
-	terrain.Cells[9].CellType = OrganicCell
-	terrain.Cells[9].Cost = 3
-
-	world := World{
-		Terrain: terrain,
-		populationController: Population{
-			NextGenerationLine:  0,
-			MutationProbability: 0,
-			Size:                1,
+	terrain := terrains.MooreTerrain{
+		terrains.Terrain{
+			Cells:  make([]contracts.ICell, 0),
+			Width:  10,
+			Height: 5,
 		},
 	}
 
-	world.Action(1, drawFrame)
+	for y := 0; y < terrain.Height; y++ {
+		for x := 0; x < terrain.Width; x++ {
+			currentCell := terrains.Cell{
+				Coords: primitives.Coords{
+					X: x,
+					Y: y,
+				},
+				CellType: contracts.EmptyCell,
+				Cost:     0,
+			}
+			terrain.Cells = append(terrain.Cells, &currentCell)
+		}
+	}
+
+	terrain.Cells[1].SetCellType(contracts.LockedCell)
+	terrain.Cells[1].SetAgent(&agent)
+
+	terrain.Cells[21].SetCellType(contracts.OrganicCell)
+	terrain.Cells[21].SetCost(3)
+
+	terrain.Cells[23].SetCellType(contracts.OrganicCell)
+	terrain.Cells[23].SetCost(3)
+
+	terrain.Cells[43].SetCellType(contracts.OrganicCell)
+	terrain.Cells[43].SetCost(3)
+
+	terrain.Cells[45].SetCellType(contracts.OrganicCell)
+	terrain.Cells[45].SetCost(3)
+
+	terrain.Cells[15].SetCellType(contracts.OrganicCell)
+	terrain.Cells[15].SetCost(3)
+
+	terrain.Cells[17].SetCellType(contracts.OrganicCell)
+	terrain.Cells[17].SetCost(3)
+
+	terrain.Cells[37].SetCellType(contracts.OrganicCell)
+	terrain.Cells[37].SetCost(3)
+
+	terrain.Cells[39].SetCellType(contracts.OrganicCell)
+	terrain.Cells[39].SetCost(3)
+
+	terrain.Cells[9].SetCellType(contracts.OrganicCell)
+	terrain.Cells[9].SetCost(3)
+
+	world := World{
+		&terrain,
+	}
+
+	world.Action(1, gui.DrawFrame)
 
 }
 
@@ -177,14 +118,24 @@ func TestWorld_Action_SpecificAgentWithChild(t *testing.T) {
 
 	rand.Seed(time.Now().UnixNano())
 
-	//randCommandIndices := rand.Perm(10)
-
-	agents := make([]Agent, 0)
-	agents = append(agents, Agent{
-		Energy:            2,
-		ReproductionPower: 10,
-		Brain: Brain{
-			CommandList: CommandList{Commands: []Command{moveCommand, eatCommand}},
+	agent := agents.Agent{
+		Brain: core.Brain{
+			CommandList: commands.CommandList{
+				Commands: []contracts.ICommand{
+					&commands2.MoveCommand{
+						commands.Command{
+							IsInterrupt: true,
+							Identifier:  0,
+						},
+					},
+					&commands2.EatCommand{
+						commands.Command{
+							IsInterrupt: false,
+							Identifier:  1,
+						},
+					},
+				},
+			},
 			Commands: []int{
 				0, 4, //down
 				1, 4, //eat down
@@ -192,69 +143,73 @@ func TestWorld_Action_SpecificAgentWithChild(t *testing.T) {
 				1, 2, //eat right
 				8,
 			},
+			CurrentAddress: 0,
 		},
-		Coords: Coords{
+		Coords: primitives.Coords{
 			X: 1,
 			Y: 0,
 		},
-	})
-
-	terrain := Terrain{
-		Cells:  make([]Cell, 0),
-		Width:  10,
-		Height: 5,
+		Energy:            2,
+		ReproductionPower: 10,
+		Generation:        0,
 	}
-	for y := 0; y < terrain.Height; y++ {
-		for x := 0; x < terrain.Width; x++ {
-			terrain.Cells = append(terrain.Cells, Cell{
-				Coords: Coords{
-					X: x,
-					Y: y,
-				},
-				CellType: EmptyCell,
-				Cost:     0,
-			})
-		}
-	}
-	terrain.Cells[1].CellType = LockedCell
-	terrain.Cells[1].Agent = &agents[0]
 
-	terrain.Cells[21].CellType = OrganicCell
-	terrain.Cells[21].Cost = 4
-
-	terrain.Cells[23].CellType = OrganicCell
-	terrain.Cells[23].Cost = 4
-
-	terrain.Cells[43].CellType = OrganicCell
-	terrain.Cells[43].Cost = 4
-
-	terrain.Cells[45].CellType = OrganicCell
-	terrain.Cells[45].Cost = 4
-
-	terrain.Cells[15].CellType = OrganicCell
-	terrain.Cells[15].Cost = 4
-
-	terrain.Cells[17].CellType = OrganicCell
-	terrain.Cells[17].Cost = 4
-
-	terrain.Cells[37].CellType = OrganicCell
-	terrain.Cells[37].Cost = 4
-
-	terrain.Cells[39].CellType = OrganicCell
-	terrain.Cells[39].Cost = 4
-
-	terrain.Cells[9].CellType = OrganicCell
-	terrain.Cells[9].Cost = 4
-
-	world := World{
-		Terrain: terrain,
-		populationController: Population{
-			NextGenerationLine:  0,
-			MutationProbability: 0,
-			Size:                1,
+	terrain := terrains.MooreTerrain{
+		terrains.Terrain{
+			Cells:  make([]contracts.ICell, 0),
+			Width:  10,
+			Height: 5,
 		},
 	}
 
-	world.Action(1, drawFrame)
+	for y := 0; y < terrain.Height; y++ {
+		for x := 0; x < terrain.Width; x++ {
+			currentCell := terrains.Cell{
+				Coords: primitives.Coords{
+					X: x,
+					Y: y,
+				},
+				CellType: contracts.EmptyCell,
+				Cost:     0,
+			}
+			terrain.Cells = append(terrain.Cells, &currentCell)
+		}
+	}
+
+	terrain.Cells[1].SetCellType(contracts.LockedCell)
+	terrain.Cells[1].SetAgent(&agent)
+
+	terrain.Cells[21].SetCellType(contracts.OrganicCell)
+	terrain.Cells[21].SetCost(4)
+
+	terrain.Cells[23].SetCellType(contracts.OrganicCell)
+	terrain.Cells[23].SetCost(4)
+
+	terrain.Cells[43].SetCellType(contracts.OrganicCell)
+	terrain.Cells[43].SetCost(4)
+
+	terrain.Cells[45].SetCellType(contracts.OrganicCell)
+	terrain.Cells[45].SetCost(4)
+
+	terrain.Cells[15].SetCellType(contracts.OrganicCell)
+	terrain.Cells[15].SetCost(4)
+
+	terrain.Cells[17].SetCellType(contracts.OrganicCell)
+	terrain.Cells[17].SetCost(4)
+
+	terrain.Cells[37].SetCellType(contracts.OrganicCell)
+	terrain.Cells[37].SetCost(4)
+
+	terrain.Cells[39].SetCellType(contracts.OrganicCell)
+	terrain.Cells[39].SetCost(4)
+
+	terrain.Cells[9].SetCellType(contracts.OrganicCell)
+	terrain.Cells[9].SetCost(4)
+
+	world := World{
+		&terrain,
+	}
+
+	world.Action(1, gui.DrawFrame)
 
 }

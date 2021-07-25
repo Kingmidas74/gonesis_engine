@@ -1,16 +1,22 @@
-package gonesis
+package core
+
+import (
+	"github.com/Kingmidas74/gonesis/contracts"
+	"github.com/Kingmidas74/gonesis/core/commands"
+	"github.com/Kingmidas74/gonesis/utils"
+)
 
 type Brain struct {
-	CommandList    CommandList
+	CommandList    commands.CommandList
 	Commands       []int
 	CurrentAddress int
 }
 
 func (this *Brain) SetAddress(address int) {
-	this.CurrentAddress = modLikePython(address, len(this.Commands))
+	this.CurrentAddress = utils.ModLikePython(address, len(this.Commands))
 }
 
-func (this *Brain) GetCurrentCommand() *Command {
+func (this *Brain) GetCurrentCommand() contracts.ICommand {
 	currentCommandIdentifier := this.GetCommandIdentifier(this.CurrentAddress)
 	currentCommand := this.CommandList.GetCommandByIdentifier(currentCommandIdentifier)
 
@@ -26,5 +32,9 @@ func (this *Brain) MoveAddressOn(delta int) {
 }
 
 func (this *Brain) GetCommandIdentifier(address int) int {
-	return this.Commands[modLikePython(address, len(this.Commands))]
+	return this.Commands[utils.ModLikePython(address, len(this.Commands))]
+}
+
+func (this *Brain) GetCurrentAddress() int {
+	return this.CurrentAddress
 }

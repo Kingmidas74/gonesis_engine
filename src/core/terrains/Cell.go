@@ -1,0 +1,54 @@
+package terrains
+
+import (
+	"github.com/Kingmidas74/gonesis/contracts"
+	"github.com/Kingmidas74/gonesis/core/primitives"
+)
+
+type Cell struct {
+	primitives.Coords
+
+	CellType contracts.CellType
+	Cost     int
+	Agent    contracts.IAgent
+}
+
+func (this *Cell) GetCellType() contracts.CellType {
+	return this.CellType
+}
+
+func (this *Cell) SetCellType(cellType contracts.CellType) {
+	this.CellType = cellType
+}
+
+func (this *Cell) GetX() int {
+	return this.X
+}
+
+func (this *Cell) SetX(x int) {
+	this.X = x
+}
+
+func (this *Cell) GetY() int {
+	return this.Y
+}
+
+func (this *Cell) SetY(y int) {
+	this.Y = y
+}
+
+func (this *Cell) GetAgent() contracts.IAgent {
+	return this.Agent
+}
+
+func (this *Cell) SetAgent(agent contracts.IAgent) {
+	this.Agent = agent
+}
+
+func (this *Cell) GetCost() int {
+	return this.Cost
+}
+
+func (this *Cell) SetCost(cost int) {
+	this.Cost = cost
+}

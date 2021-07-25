@@ -1,4 +1,4 @@
-package gonesis
+package primitives
 
 type Coords struct {
 	X int

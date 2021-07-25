@@ -9,12 +9,12 @@ type MoveCommand struct {
 	commands.Command
 }
 
-func (this *MoveCommand) Handle(terrain contracts.ITerrain, agent contracts.IAgent) {
+func (this *MoveCommand) Handle(terrain contracts.ITerrain, agent contracts.IAgent) int {
 	currentCell := terrain.GetCell(agent.GetX(), agent.GetY())
 
 	argument := agent.GetBrain().GetCommandIdentifier(agent.GetBrain().GetCurrentAddress() + 1)
 	targetCell := terrain.GetNeighbor(currentCell.GetX(), currentCell.GetY(), argument)
-
+	stepLength := this.calculateStepLength(targetCell)
 	if targetCell.GetCellType() == contracts.EmptyCell {
 		agent.SetX(targetCell.GetX())
 		agent.SetY(targetCell.GetY())
@@ -22,8 +22,24 @@ func (this *MoveCommand) Handle(terrain contracts.ITerrain, agent contracts.IAge
 		targetCell.SetCellType(contracts.LockedCell)
 		currentCell.SetAgent(nil)
 		currentCell.SetCellType(contracts.EmptyCell)
-
 	}
 
-	agent.GetBrain().MoveAddressOn(2)
+	return stepLength
+}
+
+func (this *MoveCommand) calculateStepLength(cell contracts.ICell) int {
+
+	if cell.GetCellType() == contracts.ObstacleCell {
+		return 2
+	}
+	if cell.GetCellType() == contracts.LockedCell {
+		return 3
+	}
+	if cell.GetCellType() == contracts.OrganicCell {
+		if cell.GetCost() < 0 {
+			return 1
+		}
+		return 4
+	}
+	return 5
 }

@@ -57,7 +57,8 @@ func (this *Agent) NextDay(terrain contracts.ITerrain, maxSteps int) {
 		if command == nil {
 			continue
 		}
-		command.Handle(terrain, this)
+		delta := command.Handle(terrain, this)
+		this.MoveAddressOn(delta)
 		if command.IsInterrupts() {
 			break
 		}

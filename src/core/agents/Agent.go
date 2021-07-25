@@ -14,6 +14,7 @@ type Agent struct {
 
 	ReproductionPower int
 	Generation        int
+	Age               int
 }
 
 func (this *Agent) GetGeneration() int {
@@ -36,11 +37,16 @@ func (this *Agent) GetBrain() contracts.IBrain {
 	return &this.Brain
 }
 
+func (this *Agent) GetAge() int {
+	return this.Age
+}
+
 func (this *Agent) IsAlive() bool {
 	return this.Energy > 0
 }
 
 func (this *Agent) NextDay(terrain contracts.ITerrain, maxSteps int) {
+	this.Age++
 	for step := 0; step < maxSteps && this.Energy > 0; step++ {
 		this.Energy--
 		command := this.GetCurrentCommand()

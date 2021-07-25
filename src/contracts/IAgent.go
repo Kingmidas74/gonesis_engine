@@ -1,11 +1,5 @@
 package contracts
 
-type IBrain interface {
-	GetCommandIdentifier(address int) int
-	GetCurrentAddress() int
-	MoveAddressOn(delta int)
-}
-
 type IAgent interface {
 	GetGeneration() int
 	SetGeneration(generation int)
@@ -23,4 +17,5 @@ type IAgent interface {
 	IsAlive() bool
 
 	GetBrain() IBrain
+	GetAge() int
 }

@@ -152,9 +152,10 @@ func TestWorld_Action_SpecificAgentWithChild(t *testing.T) {
 			X: 1,
 			Y: 0,
 		},
-		IReproduction: &reproductions.BuddingReproduction{
+		IReproduction: &reproductions.MitosisReproduction{
 			ReproductionPower:   10,
 			MutationProbability: 100,
+			GenerationPower:     2,
 		},
 		Energy:     2,
 		Generation: 0,

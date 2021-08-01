@@ -9,7 +9,6 @@ import (
 	"github.com/Kingmidas74/gonesis_engine/core/primitives"
 	"github.com/Kingmidas74/gonesis_engine/core/reproductions"
 	"github.com/Kingmidas74/gonesis_engine/core/terrains"
-	"github.com/Kingmidas74/gonesis_engine/gui"
 	"math/rand"
 	"testing"
 	"time"
@@ -129,7 +128,9 @@ func TestWorld_Action_SpecificAgent(t *testing.T) {
 	world := World{
 		terrain,
 	}
-	world.Action(1, gui.DrawFrame)
+	world.Action(1, func(terrain contracts.ITerrain, i int) {
+
+	})
 
 }
 
@@ -145,7 +146,9 @@ func BenchmarkWorld_Action_SpecificAgent_WithDraw(b *testing.B) {
 	world := World{
 		terrain,
 	}
-	world.Action(1, gui.DrawFrame)
+	world.Action(1, func(terrain contracts.ITerrain, i int) {
+
+	})
 }
 
 func BenchmarkWorld_Action_SpecificAgent_WithoutDraw(b *testing.B) {

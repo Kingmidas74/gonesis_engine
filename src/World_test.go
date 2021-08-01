@@ -19,23 +19,22 @@ func TestWorld_Action_SpecificAgent(t *testing.T) {
 
 	rand.Seed(time.Now().UnixNano())
 
+	commandsMap := make(map[int]contracts.ICommand)
+	commandsMap[0] = &preparedCommands.MoveCommand{
+		commands.Command{
+			IsInterrupt: true,
+		},
+	}
+	commandsMap[1] = &preparedCommands.EatCommand{
+		commands.Command{
+			IsInterrupt: false,
+		},
+	}
+
 	agent := agents.Agent{
 		IBrain: &core.Brain{
 			CommandList: commands.CommandList{
-				Commands: []contracts.ICommand{
-					&preparedCommands.MoveCommand{
-						commands.Command{
-							IsInterrupt: true,
-							Identifier:  0,
-						},
-					},
-					&preparedCommands.EatCommand{
-						commands.Command{
-							IsInterrupt: false,
-							Identifier:  1,
-						},
-					},
-				},
+				Commands: commandsMap,
 			},
 			Commands: []int{
 				0, 4, //down
@@ -127,24 +126,22 @@ func TestWorld_Action_SpecificAgent(t *testing.T) {
 func TestWorld_Action_SpecificAgentWithChild(t *testing.T) {
 
 	rand.Seed(time.Now().UnixNano())
+	commandsMap := make(map[int]contracts.ICommand)
+	commandsMap[0] = &preparedCommands.MoveCommand{
+		commands.Command{
+			IsInterrupt: true,
+		},
+	}
+	commandsMap[1] = &preparedCommands.EatCommand{
+		commands.Command{
+			IsInterrupt: false,
+		},
+	}
 
 	agent := agents.Agent{
 		IBrain: &core.Brain{
 			CommandList: commands.CommandList{
-				Commands: []contracts.ICommand{
-					&preparedCommands.MoveCommand{
-						commands.Command{
-							IsInterrupt: true,
-							Identifier:  0,
-						},
-					},
-					&preparedCommands.EatCommand{
-						commands.Command{
-							IsInterrupt: false,
-							Identifier:  1,
-						},
-					},
-				},
+				Commands: commandsMap,
 			},
 			Commands: []int{
 				0, 4, //down
@@ -236,24 +233,22 @@ func TestWorld_Action_SpecificAgentWithChild(t *testing.T) {
 
 func TestWorld2(t *testing.T) {
 	rand.Seed(time.Now().UnixNano())
+	commandsMap := make(map[int]contracts.ICommand)
+	commandsMap[0] = &preparedCommands.MoveCommand{
+		commands.Command{
+			IsInterrupt: true,
+		},
+	}
+	commandsMap[1] = &preparedCommands.EatCommand{
+		commands.Command{
+			IsInterrupt: false,
+		},
+	}
 
 	agent := agents.Agent{
 		IBrain: &core.Brain{
 			CommandList: commands.CommandList{
-				Commands: []contracts.ICommand{
-					&preparedCommands.MoveCommand{
-						commands.Command{
-							IsInterrupt: true,
-							Identifier:  0,
-						},
-					},
-					&preparedCommands.EatCommand{
-						commands.Command{
-							IsInterrupt: false,
-							Identifier:  1,
-						},
-					},
-				},
+				Commands: commandsMap,
 			},
 			Commands: []int{
 				0, 4, //down

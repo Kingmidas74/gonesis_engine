@@ -4,16 +4,11 @@ import "github.com/Kingmidas74/gonesis/contracts"
 
 type Command struct {
 	IsInterrupt bool
-	Identifier  int
 	Handler     func(contracts.ITerrain, contracts.IAgent) int
 }
 
 func (this *Command) IsInterrupts() bool {
 	return this.IsInterrupt
-}
-
-func (this *Command) GetIdentifier() int {
-	return this.Identifier
 }
 
 func (this *Command) Handle(terrain contracts.ITerrain, agent contracts.IAgent) int {

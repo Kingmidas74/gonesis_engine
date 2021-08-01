@@ -1,8 +1,8 @@
 package commands
 
 import (
-	"github.com/Kingmidas74/gonesis/contracts"
-	"github.com/Kingmidas74/gonesis/core/commands"
+	"github.com/Kingmidas74/gonesis_engine/contracts"
+	"github.com/Kingmidas74/gonesis_engine/core/commands"
 )
 
 type EatCommand struct {

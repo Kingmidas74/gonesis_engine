@@ -1,6 +1,6 @@
 package commands
 
-import "github.com/Kingmidas74/gonesis/contracts"
+import "github.com/Kingmidas74/gonesis_engine/contracts"
 
 type CommandList struct {
 	Commands map[int]contracts.ICommand

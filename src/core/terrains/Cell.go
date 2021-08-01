@@ -1,8 +1,8 @@
 package terrains
 
 import (
-	"github.com/Kingmidas74/gonesis/contracts"
-	"github.com/Kingmidas74/gonesis/core/primitives"
+	"github.com/Kingmidas74/gonesis_engine/contracts"
+	"github.com/Kingmidas74/gonesis_engine/core/primitives"
 )
 
 type Cell struct {

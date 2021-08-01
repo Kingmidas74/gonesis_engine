@@ -1,6 +1,6 @@
-package gonesis
+package gonesis_engine
 
-import "github.com/Kingmidas74/gonesis/contracts"
+import "github.com/Kingmidas74/gonesis_engine/contracts"
 
 type World struct {
 	contracts.ITerrain

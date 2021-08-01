@@ -1,8 +1,8 @@
 package reproductions
 
 import (
-	"github.com/Kingmidas74/gonesis/contracts"
-	"github.com/Kingmidas74/gonesis/utils"
+	"github.com/Kingmidas74/gonesis_engine/contracts"
+	"github.com/Kingmidas74/gonesis_engine/utils"
 )
 
 type BuddingReproduction struct {

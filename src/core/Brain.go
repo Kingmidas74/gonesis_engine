@@ -1,9 +1,9 @@
 package core
 
 import (
-	"github.com/Kingmidas74/gonesis/contracts"
-	"github.com/Kingmidas74/gonesis/core/commands"
-	"github.com/Kingmidas74/gonesis/utils"
+	"github.com/Kingmidas74/gonesis_engine/contracts"
+	"github.com/Kingmidas74/gonesis_engine/core/commands"
+	"github.com/Kingmidas74/gonesis_engine/utils"
 )
 
 type Brain struct {

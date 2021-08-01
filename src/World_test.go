@@ -1,15 +1,15 @@
-package gonesis
+package gonesis_engine
 
 import (
-	preparedCommands "github.com/Kingmidas74/gonesis/commands"
-	"github.com/Kingmidas74/gonesis/contracts"
-	"github.com/Kingmidas74/gonesis/core"
-	"github.com/Kingmidas74/gonesis/core/agents"
-	"github.com/Kingmidas74/gonesis/core/commands"
-	"github.com/Kingmidas74/gonesis/core/primitives"
-	"github.com/Kingmidas74/gonesis/core/reproductions"
-	"github.com/Kingmidas74/gonesis/core/terrains"
-	"github.com/Kingmidas74/gonesis/gui"
+	preparedCommands "github.com/Kingmidas74/gonesis_engine/commands"
+	"github.com/Kingmidas74/gonesis_engine/contracts"
+	"github.com/Kingmidas74/gonesis_engine/core"
+	"github.com/Kingmidas74/gonesis_engine/core/agents"
+	"github.com/Kingmidas74/gonesis_engine/core/commands"
+	"github.com/Kingmidas74/gonesis_engine/core/primitives"
+	"github.com/Kingmidas74/gonesis_engine/core/reproductions"
+	"github.com/Kingmidas74/gonesis_engine/core/terrains"
+	"github.com/Kingmidas74/gonesis_engine/gui"
 	"math/rand"
 	"testing"
 	"time"

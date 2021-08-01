@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/gonesis.iml" filepath="$PROJECT_DIR$/.idea/gonesis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../gonesis_engine/.idea/gonesis_engine.iml" filepath="$PROJECT_DIR$/../gonesis_engine/.idea/gonesis_engine.iml" />
     </modules>
   </component>
 </project>

@@ -1,4 +1,4 @@
-package gonesis_engine
+package world
 
 import (
 	preparedCommands "github.com/Kingmidas74/gonesis_engine/commands"

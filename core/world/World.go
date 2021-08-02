@@ -1,4 +1,4 @@
-package gonesis_engine
+package world
 
 import "github.com/Kingmidas74/gonesis_engine/contracts"
 

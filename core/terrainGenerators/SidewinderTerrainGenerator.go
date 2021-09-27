@@ -19,22 +19,22 @@ func (this *SidewinderTerrainGenerator) Generate(terrainType contracts.TerrainTy
 	for y := sy; y < height; y++ {
 		for x := sx; x < width; x++ {
 			if y != sy {
-				if utils.RandomIntBetween(0, 1) == 0 && x+2 < width {
+				if utils.RandomIntBetween(0, 1) == 0 && x+1 < width {
 					matrix[y*width+x+1] = true
 				} else {
 					randX := utils.RandomIntBetween(cx, x)
-					if y-2 >= 0 {
+					if y-1 >= 0 {
 						matrix[(y-1)*width+randX] = true
 
-						if x+1 != width {
-							cx = x + 1
+						if x+1 < width {
+							cx = x
 						} else {
 							cx = sx
 						}
 					}
 				}
 			} else {
-				if x+1 != width {
+				if x+1 < width {
 					matrix[y*width+x+1] = true
 				}
 			}

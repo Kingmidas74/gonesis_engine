@@ -13,20 +13,27 @@ func (this *BinaryTerrainGenerator) Generate(terrainType contracts.TerrainType, 
 
 	matrix := this.GenerateMatrix(width, height)
 
-	for y := 0; y < height; y++ {
-		for x := 0; x < width; x++ {
-			switch utils.RandomIntBetween(0, 1) {
-			case 0:
-				if x+1 < width && y*width+x+1 < width*height {
+	for y := 0; y < height; y = y + 2 {
+		for x := 0; x < width; x = x + 2 {
+
+			if y == 0 {
+				if x+1 < width {
 					matrix[y*width+x+1] = true
 				}
-				break
-			case 1:
-				if y+1 < height && (y+1)*width+x < width*height {
-					matrix[(y+1)*width+x] = true
-				}
-				break
+				continue
 			}
+
+			direction := utils.RandomIntBetween(0, 1)
+			if direction == 0 {
+				matrix[(y-1)*width+x] = true
+				continue
+			}
+
+			if x+1 >= width {
+				continue
+			}
+
+			matrix[y*width+x+1] = true
 		}
 	}
 

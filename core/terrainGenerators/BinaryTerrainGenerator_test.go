@@ -13,10 +13,12 @@ func TestBinaryTerrainGenerator_Generate(t *testing.T) {
 
 	terrainGenerator := BinaryTerrainGenerator{}
 
-	terrain := terrainGenerator.Generate(contracts.MooreTerrain, 5, 5)
+	size := 500
 
-	for y := 0; y < 5; y++ {
-		for x := 0; x < 5; x++ {
+	terrain := terrainGenerator.Generate(contracts.MooreTerrain, size, size)
+
+	for y := 0; y < size; y++ {
+		for x := 0; x < size; x++ {
 			print(terrain.GetCell(x, y).GetCellType())
 			print(" ")
 		}

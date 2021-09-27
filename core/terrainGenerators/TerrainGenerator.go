@@ -23,6 +23,27 @@ func (this *TerrainGenerator) GenerateMatrix(width, height int) []bool {
 
 func (this *TerrainGenerator) GenerateTerrain(terrainType contracts.TerrainType, matrix []bool, width, height int) contracts.ITerrain {
 
+	terrain := terrains.Terrain{
+		Cells:  this.TransformMatrixToCells(matrix, width, height),
+		Width:  width,
+		Height: height,
+	}
+
+	var result contracts.ITerrain
+
+	switch terrainType {
+	case contracts.MooreTerrain:
+		result = &terrains.MooreTerrain{Terrain: terrain}
+	case contracts.NeumannTerrain:
+		result = &terrains.NeumannTerrain{Terrain: terrain}
+	case contracts.HexTerrain:
+		result = &terrains.HexTerrain{Terrain: terrain}
+	}
+	return result
+}
+
+func (this *TerrainGenerator) TransformMatrixToCells(matrix []bool, width, height int) []contracts.ICell {
+
 	cells := make([]contracts.ICell, 0)
 
 	for y := 0; y < height; y++ {
@@ -41,21 +62,5 @@ func (this *TerrainGenerator) GenerateTerrain(terrainType contracts.TerrainType,
 		}
 	}
 
-	terrain := terrains.Terrain{
-		Cells:  cells,
-		Width:  width,
-		Height: height,
-	}
-
-	var result contracts.ITerrain
-
-	switch terrainType {
-	case contracts.MooreTerrain:
-		result = &terrains.MooreTerrain{Terrain: terrain}
-	case contracts.NeumannTerrain:
-		result = &terrains.NeumannTerrain{Terrain: terrain}
-	case contracts.HexTerrain:
-		result = &terrains.HexTerrain{Terrain: terrain}
-	}
-	return result
+	return cells
 }

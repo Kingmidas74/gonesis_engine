@@ -13,16 +13,8 @@ func TestSidewinderTerrainGenerator_Generate(t *testing.T) {
 
 	terrainGenerator := SidewinderTerrainGenerator{}
 
-	size := 7
+	size := 101
 
-	terrain := terrainGenerator.Generate(contracts.MooreTerrain, size, size)
-
-	for y := 0; y < size; y++ {
-		for x := 0; x < size; x++ {
-			print(terrain.GetCell(x, y).GetCellType())
-			print(" ")
-		}
-		println()
-	}
+	terrainGenerator.Generate(contracts.MooreTerrain, size, size)
 
 }

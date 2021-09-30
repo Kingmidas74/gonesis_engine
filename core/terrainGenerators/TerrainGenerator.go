@@ -4,18 +4,17 @@ import (
 	"github.com/Kingmidas74/gonesis_engine/contracts"
 	"github.com/Kingmidas74/gonesis_engine/core/primitives"
 	"github.com/Kingmidas74/gonesis_engine/core/terrains"
-	"github.com/Kingmidas74/gonesis_engine/utils"
 )
 
 type TerrainGenerator struct {
 }
 
 func (this *TerrainGenerator) GenerateMatrix(width, height int) []bool {
-	result := make([]bool, 0)
+	result := make([]bool, width*height)
 
-	for y := 0; y < height; y++ {
-		for x := 0; x < width; x++ {
-			result = append(result, utils.ModLikePython(x, 2) == 0 && utils.ModLikePython(y, 2) == 0)
+	for y := 0; y < height; y = y + 2 {
+		for x := 0; x < width; x = x + 2 {
+			result[y*width+x] = true
 		}
 	}
 	result[0] = true
@@ -45,7 +44,7 @@ func (this *TerrainGenerator) GenerateTerrain(terrainType contracts.TerrainType,
 
 func (this *TerrainGenerator) TransformMatrixToCells(matrix []bool, width, height int) []contracts.ICell {
 
-	cells := make([]contracts.ICell, 0)
+	cells := make([]contracts.ICell, width*height)
 
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
@@ -62,7 +61,7 @@ func (this *TerrainGenerator) TransformMatrixToCells(matrix []bool, width, heigh
 			if x+1 == width || y+1 == height || x == 0 || y == 0 {
 				currentCell.SetCellType(contracts.EmptyCell)
 			}
-			cells = append(cells, currentCell)
+			cells[y*width+x] = currentCell
 		}
 	}
 
